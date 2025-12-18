@@ -1,1 +1,1 @@
-U fit edit the readme, i no get idea
+A modern, production-ready web application that enables Nigerian university students to calculate semester GPA and cumulative CGPA using the official 5-point grading system, and generate a clean, print-ready academic transcript PDF identical in structure to Nigerian university result sheets
