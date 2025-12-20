@@ -4,105 +4,63 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UniCalc | University Transcript Builder</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <link rel="stylesheet" href="assets/css/main.css" />
   </head>
+
   <body>
     <div class="container">
       <header>
         <h1>UniCalc Scholar</h1>
-        <p class="subtitle">Semester Result & Transcript Builder (Side Project by Rava & Webs)</p>
+        <p class="subtitle">
+          Semester Result & Transcript Builder (Side Project by Rava & BhigDave)
+        </p>
       </header>
 
       <div class="card">
         <div class="input-group">
           <div class="field">
-            <label>FULL NAME</label>
-            <input type="text" id="studentName" placeholder="e.g. John Doe" />
+            <label>STUDENT FULL NAME</label>
+            <input type="text" id="studentName" placeholder="e.g. John Okoro" />
           </div>
           <div class="field">
             <label>MATRIC NUMBER</label>
             <input type="text" id="matricNo" placeholder="e.g. U2023/123456" />
           </div>
         </div>
-        <div class="field">
-          <label>ACADEMIC YEAR</label>
-          <select id="academicYear">
-            <option value="FIRST YEAR">FIRST YEAR</option>
-            <option value="SECOND YEAR">SECOND YEAR</option>
-            <option value="THIRD YEAR">THIRD YEAR</option>
-            <option value="FOURTH YEAR">FOURTH YEAR</option>
-            <option value="FIFTH YEAR">FIFTH YEAR</option>
-          </select>
-        </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">
-          SEMESTER ONE
-          <button class="btn btn-add" onclick="addRow('sem1-body')">
-            + Add Course
-          </button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th class="col-sn">SN</th>
-              <th class="col-code">COURSE CODE</th>
-              <th class="col-unit">UNIT</th>
-              <th class="col-grade">GRADE</th>
-              <th class="col-action"></th>
-            </tr>
-          </thead>
-          <tbody id="sem1-body"></tbody>
-        </table>
+      <div id="years-container"></div>
+
+      <div class="add-year-wrapper">
+        <button class="btn btn-secondary" onclick="addNewYear()">
+          + Add Another Academic Year
+        </button>
       </div>
 
-      <div class="card">
-        <div class="card-title">
-          SEMESTER TWO
-          <button class="btn btn-add" onclick="addRow('sem2-body')">
-            + Add Course
-          </button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th class="col-sn">SN</th>
-              <th class="col-code">COURSE CODE</th>
-              <th class="col-unit">UNIT</th>
-              <th class="col-grade">GRADE</th>
-              <th class="col-action"></th>
-            </tr>
-          </thead>
-          <tbody id="sem2-body"></tbody>
-        </table>
-      </div>
+      <div class="card summary-card">
+        <div class="card-title">CUMULATIVE SUMMARY (ALL YEARS)</div>
 
-      <div class="card">
-        <div class="card-title">ACADEMIC SUMMARY</div>
+        <div id="gpa-breakdown" style="margin-bottom: 25px"></div>
+
         <div class="results-grid">
           <div class="stat-box">
-            <div class="stat-label">Semester 1 GPA</div>
-            <div class="stat-value" id="gpa1">0.00</div>
+            <div class="stat-label">Total Credit Units</div>
+            <div class="stat-value" id="totalUnits">0</div>
           </div>
           <div class="stat-box">
-            <div class="stat-label">Semester 2 GPA</div>
-            <div class="stat-value" id="gpa2">0.00</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-label">Session CGPA</div>
+            <div class="stat-label">Cumulative CGPA</div>
             <div class="stat-value" id="cgpa">0.00</div>
             <div class="class-badge" id="class">N/A</div>
           </div>
         </div>
         <button class="btn btn-primary" onclick="exportPDF()">
-          Download Transcript PDF
+          Download Full Transcript PDF
         </button>
       </div>
     </div>
