@@ -29,6 +29,5 @@ How to Use:
 
 * Export: Click "Download Full Transcript PDF" to save a copy for your records or applications.
 
-** License **
-// This project is open-source and free to use.
+This project is open-source and free to use.
 
