@@ -11,6 +11,9 @@ Key Features:
 
 * Smart Classification: Automatically determines your degree class (e.g., First Class, Second Class Upper) based on standard 5.0 CGPA scales.
 
+New Features:
+* Implemented Local Storage to save user progress
+
 Built With:
 * HTML5 & CSS3: For a clean, modern, card-based user interface.
 

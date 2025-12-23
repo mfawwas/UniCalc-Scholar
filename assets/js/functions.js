@@ -2,8 +2,14 @@
 const GRADE_POINTS = { A: 5, B: 4, C: 3, D: 2, E: 1, F: 0 };
 let yearCounter = 0;
 
-// Initialize with one academic year
-window.onload = () => addNewYear();
+window.onload = () => {
+  const savedData = localStorage.getItem("unicalc_data");
+  if (savedData) {
+    loadFromLocalStorage(savedData);
+  } else {
+    addNewYear();
+  }
+};
 
 function addNewYear() {
   yearCounter++;
@@ -15,7 +21,18 @@ function addNewYear() {
             <h2 style="margin-bottom: 20px; color: var(--primary);">ACADEMIC YEAR ${yearCounter}</h2>
             
             <div class="card">
-                <div class="card-title">SEMESTER ONE <button class="btn btn-add" onclick="addRow('${yearId}-s1')">+ Add Course</button></div>
+                <div class="card-title">
+                    <span>SEMESTER ONE</span>
+                    <div class="bulk-add">
+                        <select id="${yearId}-s1-count">
+                            <option value="1">1</option>
+                            <option value="3">3</option>
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                        </select>
+                        <button class="btn-add" onclick="bulkAddRows('${yearId}-s1')">+ Add Course</button>
+                    </div>
+                </div>
                 <table>
                     <thead><tr><th style="width:50px">SN</th><th>COURSE CODE</th><th style="width:100px">UNIT</th><th style="width:100px">GRADE</th><th style="width:50px"></th></tr></thead>
                     <tbody id="${yearId}-s1"></tbody>
@@ -23,7 +40,18 @@ function addNewYear() {
             </div>
 
             <div class="card">
-                <div class="card-title">SEMESTER TWO <button class="btn btn-add" onclick="addRow('${yearId}-s2')">+ Add Course</button></div>
+                <div class="card-title">
+                    <span>SEMESTER TWO</span>
+                    <div class="bulk-add">
+                        <select id="${yearId}-s2-count">
+                            <option value="1">1</option>
+                            <option value="3">3</option>
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                        </select>
+                        <button class="btn-add" onclick="bulkAddRows('${yearId}-s2')">+ Add Course</button>
+                    </div>
+                </div>
                 <table>
                     <thead><tr><th style="width:50px">SN</th><th>COURSE CODE</th><th style="width:100px">UNIT</th><th style="width:100px">GRADE</th><th style="width:50px"></th></tr></thead>
                     <tbody id="${yearId}-s2"></tbody>
@@ -34,21 +62,36 @@ function addNewYear() {
 
   container.insertAdjacentHTML("beforeend", yearHtml);
 
-  // Add 3 initial rows for each semester
-  for (let i = 0; i < 3; i++) {
+  // Default: Start with 2 rows for each new semester
+  for (let i = 0; i < 2; i++) {
     addRow(`${yearId}-s1`);
     addRow(`${yearId}-s2`);
   }
+  return yearId;
 }
 
-// Function to add a new course row
+// New function for Bulk Adding
+function bulkAddRows(tbodyId) {
+  const count = document.getElementById(`${tbodyId}-count`).value;
+  for (let i = 0; i < count; i++) {
+    addRow(tbodyId);
+  }
+}
+
 function addRow(tbodyId) {
   const tbody = document.getElementById(tbodyId);
   const row = document.createElement("tr");
   row.innerHTML = `
         <td></td>
         <td><input type="text" class="c-code" placeholder="e.g. MTH101" oninput="calculate()"></td>
-        <td><input type="number" class="c-unit" min="1" max="6" oninput="calculate()"></td>
+        <td>
+            <select class="c-unit" onchange="calculate()">
+                <option value="0">-</option>
+                <option value="1">1</option><option value="2">2</option>
+                <option value="3">3</option><option value="4">4</option>
+                <option value="5">5</option><option value="6">6</option>
+            </select>
+        </td>
         <td>
             <select class="c-grade" onchange="calculate()">
                 <option value="">-</option>
@@ -61,9 +104,9 @@ function addRow(tbodyId) {
     `;
   tbody.appendChild(row);
   updateRowNumbers(tbody);
+  return row;
 }
 
-// Function to remove a course row
 function removeRow(btn) {
   const tbody = btn.closest("tbody");
   btn.closest("tr").remove();
@@ -71,12 +114,69 @@ function removeRow(btn) {
   calculate();
 }
 
-// Function to update row numbers
 function updateRowNumbers(tbody) {
   Array.from(tbody.rows).forEach((row, i) => (row.cells[0].innerText = i + 1));
 }
 
-// Function to calculate GPA and CGPA
+// Local Storage
+function saveToLocalStorage() {
+  const data = {
+    studentName: document.getElementById("studentName")?.value || "",
+    matricNo: document.getElementById("matricNo")?.value || "",
+    years: [],
+  };
+
+  for (let i = 1; i <= yearCounter; i++) {
+    data.years.push({
+      s1: getSemesterData(`year-${i}-s1`),
+      s2: getSemesterData(`year-${i}-s2`),
+    });
+  }
+  localStorage.setItem("unicalc_data", JSON.stringify(data));
+}
+
+function getSemesterData(tbodyId) {
+  return Array.from(document.querySelectorAll(`#${tbodyId} tr`))
+    .map((row) => ({
+      code: row.querySelector(".c-code").value,
+      unit: row.querySelector(".c-unit").value,
+      grade: row.querySelector(".c-grade").value,
+    }))
+    .filter((r) => r.code !== "" || r.unit !== "0" || r.grade !== "");
+}
+
+function loadFromLocalStorage(savedJSON) {
+  const data = JSON.parse(savedJSON);
+  if (document.getElementById("studentName"))
+    document.getElementById("studentName").value = data.studentName;
+  if (document.getElementById("matricNo"))
+    document.getElementById("matricNo").value = data.matricNo;
+
+  data.years.forEach((year, index) => {
+    const yearId = addNewYear();
+    // Clear the default rows created by addNewYear before loading saved ones
+    document.getElementById(`${yearId}-s1`).innerHTML = "";
+    document.getElementById(`${yearId}-s2`).innerHTML = "";
+
+    fillSemesterTable(`${yearId}-s1`, year.s1);
+    fillSemesterTable(`${yearId}-s2`, year.s2);
+  });
+  calculate();
+}
+
+function fillSemesterTable(tbodyId, rowsData) {
+  if (rowsData.length === 0) {
+    for (let i = 0; i < 5; i++) addRow(tbodyId);
+    return;
+  }
+  rowsData.forEach((item) => {
+    const row = addRow(tbodyId);
+    row.querySelector(".c-code").value = item.code;
+    row.querySelector(".c-unit").value = item.unit;
+    row.querySelector(".c-grade").value = item.grade;
+  });
+}
+
 function getSemesterStats(tbodyId) {
   let u = 0,
     p = 0;
@@ -91,28 +191,24 @@ function getSemesterStats(tbodyId) {
   return { u, p, gpa: u > 0 ? (p / u).toFixed(2) : "0.00" };
 }
 
-// Main calculation function
 function calculate() {
   let grandTotalUnits = 0;
   let grandTotalPoints = 0;
   const breakdownContainer = document.getElementById("gpa-breakdown");
-  breakdownContainer.innerHTML = "";
+  if (breakdownContainer) breakdownContainer.innerHTML = "";
 
   for (let i = 1; i <= yearCounter; i++) {
     const s1 = getSemesterStats(`year-${i}-s1`);
     const s2 = getSemesterStats(`year-${i}-s2`);
-
     grandTotalUnits += s1.u + s2.u;
     grandTotalPoints += s1.p + s2.p;
 
-    const row = document.createElement("div");
-    row.className = "gpa-row";
-    row.innerHTML = `
-            <span><b>YEAR ${i}</b></span>
-            <span>Sem 1 GPA: <b>${s1.gpa}</b></span>
-            <span>Sem 2 GPA: <b>${s2.gpa}</b></span>
-        `;
-    breakdownContainer.appendChild(row);
+    if (breakdownContainer) {
+      const row = document.createElement("div");
+      row.className = "gpa-row";
+      row.innerHTML = `<span><b>YEAR ${i}</b></span><span>S1 GPA: <b>${s1.gpa}</b></span><span>S2 GPA: <b>${s2.gpa}</b></span>`;
+      breakdownContainer.appendChild(row);
+    }
   }
 
   const cgpa =
@@ -124,9 +220,10 @@ function calculate() {
   document.getElementById("class").innerText = getClassification(
     parseFloat(cgpa)
   );
+
+  saveToLocalStorage();
 }
 
-// Function to determine degree classification
 function getClassification(cgpa) {
   if (cgpa >= 4.5) return "First Class";
   if (cgpa >= 3.5) return "Second Class Upper";
@@ -161,7 +258,7 @@ function exportPDF() {
     doc.setFont(undefined, "bold");
     doc.text(`ACADEMIC YEAR ${i}`, 20, currentY);
     currentY += 5;
-    
+
     ["s1", "s2"].forEach((sem) => {
       const stats = getSemesterStats(`year-${i}-${sem}`);
       const rows = Array.from(document.querySelectorAll(`#year-${i}-${sem} tr`))
@@ -223,4 +320,28 @@ function exportPDF() {
   );
 
   doc.save(`${name.replace(/\s+/g, "_")}_Transcript.pdf`);
+}
+
+// Modal For Clear Confirmation
+function clearAllData() {
+  document.getElementById("clearModal").style.display = "flex";
+}
+
+function closeClearModal() {
+  document.getElementById("clearModal").style.display = "none";
+}
+
+function confirmClearAll() {
+  localStorage.removeItem("unicalc_data");
+
+  document.getElementById("studentName").value = "";
+  document.getElementById("matricNo").value = "";
+  yearCounter = 0;
+  document.getElementById("years-container").innerHTML = "";
+
+  addNewYear();
+  calculate();
+
+  closeClearModal();
+  alert("All records cleared successfully.");
 }

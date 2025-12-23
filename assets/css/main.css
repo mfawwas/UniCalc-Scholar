@@ -176,7 +176,6 @@ td {
   color: var(--primary);
 }
 
-/* Stats Dashboard */
 .results-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -205,6 +204,137 @@ td {
   font-size: 0.85rem;
   margin-top: 8px;
   display: inline-block;
+}
+
+.bulk-add {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+
+.bulk-add:focus-within {
+  border-color: var(--primary);
+}
+
+.bulk-add select {
+  padding: 8px 12px;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: transparent;
+  cursor: pointer;
+  width: 60px;
+  text-align: left;
+}
+
+.bulk-add .btn-add {
+  background: #ebf4ff;
+  color: var(--accent);
+  border: none;
+  border-left: 1px solid var(--border);
+  padding: 9.5px 24px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 100%;
+  border-radius: 0;
+}
+
+.bulk-add .btn-add:hover {
+  background: var(--accent);
+  color: white;
+}
+
+select.c-unit,
+select.c-grade {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px !important;
+}
+
+.btn-danger:hover {
+  background: #fff5f5 !important;
+  border-color: #e53e3e !important;
+  color: #c53030 !important;
+}
+
+/* Modal Background Overlay */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal Box */
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.modal-icon {
+  font-size: 2rem;
+  color: #e53e3e;
+  margin-bottom: 15px;
+}
+
+.modal-content h2 {
+  margin-bottom: 10px;
+  color: #1a202c;
+}
+.modal-content p {
+  color: #718096;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+/* Modal Buttons */
+.modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.btn-modal-cancel {
+  background: #edf2f7;
+  color: #4a5568;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-modal-delete {
+  background: #e53e3e;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 /* Mobile Tweaks */
