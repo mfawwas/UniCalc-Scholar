@@ -1,36 +1,31 @@
-// Function: unicalc-app.js
+// Function
+function toggleTheme() {
+  const body = document.body;
+  const icon = document.getElementById("theme-icon");
 
-window.addEventListener("scroll", () => {
-  const nav = document.querySelector(".navbar");
-  if (window.scrollY > 20) {
-    nav.classList.add("navbar-scrolled");
+  body.classList.toggle("dark-mode");
+
+  if (body.classList.contains("dark-mode")) {
+    if (icon) icon.setAttribute("name", "sunny-outline");
+    localStorage.setItem("theme", "dark");
   } else {
-    nav.classList.remove("navbar-scrolled");
+    if (icon) icon.setAttribute("name", "moon-outline");
+    localStorage.setItem("theme", "light");
   }
-});
-
-function revealOnScroll() {
-  const reveals = document.querySelectorAll(".reveal");
-
-  reveals.forEach((element) => {
-    const windowHeight = window.innerHeight;
-    const elementTop = element.getBoundingClientRect().top;
-    const elementBottom = element.getBoundingClientRect().bottom;
-    const revealPoint = 100;
-
-    if (
-      elementTop < windowHeight - revealPoint &&
-      elementBottom > revealPoint
-    ) {
-      element.classList.add("active");
-    } else {
-      element.classList.remove("active");
-    }
-  });
 }
 
-window.addEventListener("scroll", revealOnScroll);
-revealOnScroll();
+window.onload = () => {
+  const savedTheme = localStorage.getItem("theme");
+  const icon = document.getElementById("theme-icon");
+  if (savedTheme === "light") {
+    document.body.classList.remove("dark-mode");
+    if (icon) icon.setAttribute("name", "moon-outline");
+  } else if (savedTheme === "dark") {
+    document.body.classList.add("dark-mode");
+    if (icon) icon.setAttribute("name", "sunny-outline");
+  }
+};
+
 
 // Loading Screen Logic
 function startLoading(callback) {
@@ -39,7 +34,7 @@ function startLoading(callback) {
   const text = document.getElementById("loader-text");
   let width = 0;
 
-  const messages = ["Initializing...", "Securing math engine...", "Ready."];
+  const messages = ["Initializing...", "Linking to engine...", "Loading User Interface...", "Ready."];
 
   const interval = setInterval(() => {
     if (width >= 100) {
@@ -58,7 +53,7 @@ function startLoading(callback) {
       else if (width < 80) text.innerText = messages[1];
       else text.innerText = messages[2];
     }
-  }, 550);
+  }, 350);
 }
 
 window.addEventListener("load", () => {

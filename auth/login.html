@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | UniCalc-Scholar</title>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <link rel="stylesheet" href="../assets/css/auth.css" />
+  </head>
+  <body class="dark-mode">
+    <div id="loader-wrapper">
+      <div class="loader-content">
+        <div class="loader-logo">UniCalc<span> Scholar</span></div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <p id="loader-text">Preparing your workspace...</p>
+      </div>
+    </div>
+
+    <div class="auth-container">
+      <div class="auth-logo">UniCalc<span> Scholar</span></div>
+
+      <div class="auth-card">
+        <h1>Log in to UniCalc</h1>
+
+        <form id="login-form">
+          <div class="input-group">
+            <ion-icon name="mail-outline"></ion-icon>
+            <input name="email" type="email" placeholder="Email" required />
+          </div>
+
+          <div class="input-group">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              required
+            />
+          </div>
+
+          <div class="form-options">
+            <a href="forgot-password.html" class="forgot-link"
+              >Forgot password?</a
+            >
+          </div>
+
+          <button type="submit" class="btn-auth">Log in</button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-wrapper" onclick="toggleTheme()">
+      <ion-icon id="theme-icon" name="sunny-outline"></ion-icon>
+    </div>
+
+    <script src="../assets/js/auth.js"></script>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify Account | UniCalc-Scholar</title>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <link rel="stylesheet" href="../assets/css/auth.css" />
+  </head>
+
+  <div id="loader-wrapper">
+    <div class="loader-content">
+      <div class="loader-logo">UniCalc<span> Scholar</span></div>
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <p id="loader-text">Preparing your workspace...</p>
+    </div>
+  </div>
+
+  <body class="dark-mode">
+    <div class="auth-container">
+      <div class="auth-logo">UniCalc<span> Scholar</span></div>
+
+      <div class="auth-card">
+        <h1>Verify Your Account</h1>
+
+        <form id="login-form">
+          <div class="input-group">
+            <ion-icon name="shield-outline"></ion-icon>
+            <input name="otp" type="name" placeholder="Enter your 6-digit code" required />
+          </div>
+
+          <button type="submit" class="btn-auth">Verify Account</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="theme-wrapper" onclick="toggleTheme()">
+      <ion-icon id="theme-icon" name="sunny-outline"></ion-icon>
+    </div>
+
+    <script src="../assets/js/auth.js"></script>
+  </body>
+</html>
