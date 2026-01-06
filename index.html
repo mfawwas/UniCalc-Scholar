@@ -1,106 +1,164 @@
 <!DOCTYPE html>
+<!-- HTML: Main document - Sections: nav, header, features, steps, final-cta, footer -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UniCalc | University Transcript Builder</title>
+    <title>UniCalc | Your Academic Journey, Simplified</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
       rel="stylesheet"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="assets/css/app.css" />
   </head>
-
   <body>
-    <div class="container">
-      <header>
-        <h1>UniCalc Scholar</h1>
-        <p class="subtitle">
-          Semester Result & Transcript Builder (Side Project by Rava & BhigDave)
+    <nav class="navbar">
+      <div class="nav-container">
+        <span class="logo">UniCalc<span> Scholar</span></span>
+        <a href="pages/app.html" target="_blank" class="btn-nav">Launch App</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+
+      <div class="hero-content">
+        <span class="badge">V2 Now Live</span>
+        <h1>Calculate your GPA with <span>absolute precision.</span></h1>
+        <p>
+          The premium academic planner for students. <br />
+          Plan your semesters, predict your CGPA, and export professional
+          transcripts.
         </p>
-      </header>
 
-      <div class="card">
-        <div class="input-group">
-          <div class="field">
-            <label>STUDENT FULL NAME</label>
-            <input type="text" id="studentName" placeholder="e.g. John Okoro" />
-          </div>
-          <div class="field">
-            <label>MATRIC NUMBER</label>
-            <input type="text" id="matricNo" placeholder="e.g. U2023/123456" />
-          </div>
+        <div class="hero-btns">
+          <a href="auth/signup.html" class="btn-primary">Get Started</a>
+          <a href="#features" class="btn-secondary">View Features</a>
         </div>
       </div>
 
-      <div id="years-container"></div>
+      <div class="hero-preview"></div>
+    </header>
 
-      <div class="add-year-wrapper">
-        <button class="btn btn-secondary" onclick="addNewYear()">
-          + Add Another Academic Year
-        </button>
-      </div>
-
-      <div class="card summary-card">
-        <div class="card-title">CUMULATIVE SUMMARY (ALL YEARS)</div>
-
-        <div id="gpa-breakdown" style="margin-bottom: 25px"></div>
-
-        <div class="results-grid">
-          <div class="stat-box">
-            <div class="stat-label">Total Credit Units</div>
-            <div class="stat-value" id="totalUnits">0</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-label">Cumulative CGPA</div>
-            <div class="stat-value" id="cgpa">0.00</div>
-            <div class="class-badge" id="class">N/A</div>
-          </div>
+    <section id="features" class="features reveal">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge">Why Should You Choose UniCalc?</span>
+          <h2>Built for Academic Excellence</h2>
+          <p>
+            Everything you need to manage your grades and plan your path to your
+            Perfect Grade.
+          </p>
         </div>
-        <button class="btn btn-primary" onclick="exportPDF()">
-          Download Full Transcript PDF
-        </button>
-        <button
-          class="btn btn-danger"
-          onclick="clearAllData()"
-          style="
-            margin-top: 10px;
-            background: #fff;
-            color: #e53e3e;
-            border: 1px solid #feb2b2;
-            width: 100%;
-            padding: 12px;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-          "
-        >
-          Clear All Records
-        </button>
 
-        <div id="clearModal" class="modal-overlay">
-          <div class="modal-content">
-            <div class="modal-icon">⚠️</div>
-            <h2>Clear All Records?</h2>
-            <p>
-              You are about to delete all entered courses, grades, and student
-              info. This action cannot be undone.
-            </p>
-            <div class="modal-actions">
-              <button class="btn-modal-cancel" onclick="closeClearModal()">
-                No, keep it
-              </button>
-              <button class="btn-modal-delete" onclick="confirmClearAll()">
-                Yes, Delete!
-              </button>
+        <div class="features-grid">
+          <div class="feature-card reveal">
+            <div class="feature-icon">
+              <i class="fa-solid fa-bullseye"></i>
             </div>
+            <h3>Precision Logic</h3>
+            <p>
+              Built with V2 math engines to ensure your GPA and CGPA are
+              accurate to the last decimal.
+            </p>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="feature-icon">
+              <i class="fa-solid fa-floppy-disk"></i>
+            </div>
+            <h3>Smart Auto-Save</h3>
+            <p>
+              Never lose your progress. Your data is automatically saved as you
+              type.
+            </p>
+          </div>
+
+          <div class="feature-card reveal">
+            <div class="feature-icon">
+              <i class="fa-solid fa-file-pdf"></i>
+            </div>
+            <h3>Pro PDF Export</h3>
+            <p>
+              Generate clean, professional transcripts ready for printing or
+              digital applications.
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <script src="assets/js/functions.js"></script>
+    <section id="how-it-works" class="steps reveal">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="badge">Simple Process</span>
+          <h2>How it Works</h2>
+          <p>Three simple steps to professional academic records.</p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card reveal">
+            <div class="step-number">01</div>
+            <div class="step-icon"><i class="fa-solid fa-user-pen"></i></div>
+            <h3>Set Up Profile</h3>
+            <p>
+              Enter your name and matric number to personalize your academic
+              dashboard.
+            </p>
+          </div>
+
+          <div class="step-card reveal">
+            <div class="step-number">02</div>
+            <div class="step-icon"><i class="fa-solid fa-list-check"></i></div>
+            <h3>Log Your Grades</h3>
+            <p>
+              Input your courses, units, and grades. Our engine handles the math
+              instantly.
+            </p>
+          </div>
+
+          <div class="step-card reveal">
+            <div class="step-number">03</div>
+            <div class="step-icon">
+              <i class="fa-solid fa-cloud-arrow-down"></i>
+            </div>
+            <h3>Export & Save</h3>
+            <p>
+              Download your professional PDF transcript and let the app
+              auto-save your data.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta reveal">
+      <div class="cta-container reveal">
+        <div class="cta-content reveal">
+          <h2>Ready to take control of your results?</h2>
+          <p>
+            Join students who use UniCalc-Scholar to track their
+            academic journey with absolute precision. Sign-up is optional, just
+            results.
+          </p>
+          <div class="cta-btns reveal">
+            <a href="pages/app.html" target="_blank" class="btn-primary btn-cta"
+              >Launch Scholar V2</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-simple">
+      <p>&copy; 2026 UniCalc-Scholar. Built for Academic Excellence. <br> Developed by Rava Tech & Bhig Dave</p>
+    </footer>
+
+    <script src="assets/js/unicalc-app.js"></script>
   </body>
 </html>
