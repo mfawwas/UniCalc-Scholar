@@ -11,9 +11,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <link rel="stylesheet" href="../assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/app.css" />
   </head>
 
   <body>
+    <div id="loader-wrapper">
+      <div class="loader-content">
+        <div class="loader-logo">UniCalc<span>Scholar</span></div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <p id="loader-text">Preparing your workspace...</p>
+      </div>
+    </div>
+
     <div class="container">
       <header>
         <h1>UniCalc Scholar</h1>
@@ -102,5 +113,6 @@
     </div>
 
     <script src="../assets/js/functions.js"></script>
+    <script src="../assets/js/unicalc-app.js"></script>
   </body>
 </html>
