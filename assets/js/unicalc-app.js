@@ -1,5 +1,4 @@
-// Function: unicalc-app.js
-
+// Function
 window.addEventListener("scroll", () => {
   const nav = document.querySelector(".navbar");
   if (window.scrollY > 20) {

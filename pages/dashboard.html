@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | UniCalc Scholar</title>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+  </head>
+  <body class="light-mode">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-icon"><ion-icon name="school"></ion-icon></div>
+          <div class="logo-text">UniCalc</div>
+        </div>
+
+        <nav class="nav-menu">
+          <div class="nav-label">Menu</div>
+          <a href="#" class="nav-item active">
+            <ion-icon name="grid-outline"></ion-icon>
+            <span>Dashboard</span>
+          </a>
+          <a href="#" class="nav-item">
+            <ion-icon name="folder-open-outline"></ion-icon>
+            <span>Academic Records</span>
+          </a>
+          <a href="#" class="nav-item">
+            <ion-icon name="calculator-outline"></ion-icon>
+            <span>CGPA Calculator</span>
+          </a>
+          <a href="#" class="nav-item">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>Transcripts</span>
+          </a>
+
+          <div class="nav-label">Preferences</div>
+          <a href="#" class="nav-item">
+            <ion-icon name="settings-outline"></ion-icon>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="user-profile-container" id="profile-trigger">
+          <div class="profile-dropup" id="profile-menu">
+            <a href="#" class="dropup-item">
+              <ion-icon name="settings-outline"></ion-icon>
+              <span>Account Settings</span>
+            </a>
+            <a href="#" class="dropup-item">
+              <ion-icon name="stats-chart-outline"></ion-icon>
+              <span>View Metrics</span>
+            </a>
+            <div class="dropup-divider"></div>
+            <a href="#" class="dropup-item danger">
+              <ion-icon name="log-out-outline"></ion-icon>
+              <span>Logout</span>
+            </a>
+          </div>
+
+          <div class="user-mini-profile">
+            <div class="avatar">JK</div>
+            <div class="user-info">
+              <span class="name">John Kuame</span>
+              <span class="role">Student</span>
+            </div>
+            <button
+              class="btn-icon"
+              id="theme-toggle-btn"
+              onclick="toggleTheme(event)"
+            >
+              <ion-icon name="moon-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-bar">
+          <h1 class="page-title">Dashboard</h1>
+          <div class="actions">
+            <button class="btn-secondary">
+              <ion-icon name="cloud-upload-outline"></ion-icon> Sync Data
+            </button>
+            <button class="btn-primary">
+              <ion-icon name="add"></ion-icon> Add Semester
+            </button>
+          </div>
+        </header>
+
+        <section class="stats-grid">
+          <div class="card stat-card hero">
+            <div class="stat-header">
+              <span>Current CGPA</span>
+              <ion-icon name="trending-up-outline"></ion-icon>
+            </div>
+            <div class="stat-value">4.52</div>
+            <div class="stat-footer">
+              <span class="badge success">First Class</span>
+              <span class="subtext">Top 5% of class</span>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-header">
+              <span>Total Units</span>
+              <ion-icon name="layers-outline"></ion-icon>
+            </div>
+            <div class="stat-value">102</div>
+            <div class="stat-footer">
+              <span class="subtext">12 units this semester</span>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="stat-header">
+              <span>Level</span>
+              <ion-icon name="library-outline"></ion-icon>
+            </div>
+            <div class="stat-value">300L</div>
+            <div class="stat-footer">
+              <span class="subtext">Microbiology</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section">
+          <div class="section-header">
+            <h2>Recent Activity</h2>
+            <a href="#" class="link-muted">View all</a>
+          </div>
+
+          <div class="card activity-table">
+            <div class="table-row header">
+              <div class="col">Activity</div>
+              <div class="col">Date</div>
+              <div class="col">Status</div>
+            </div>
+            <div class="table-row">
+              <div class="col">
+                <ion-icon name="document-text-outline"></ion-icon> Generated
+                Transcript
+              </div>
+              <div class="col">Oct 24, 2025</div>
+              <div class="col">
+                <span class="status-pill success">Completed</span>
+              </div>
+            </div>
+            <div class="table-row">
+              <div class="col">
+                <ion-icon name="calculator-outline"></ion-icon> Updated Year 2
+                Sem 1
+              </div>
+              <div class="col">Oct 22, 2025</div>
+              <div class="col">
+                <span class="status-pill warning">Draft</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../assets/js/pages.js"></script>
+  </body>
+</html>

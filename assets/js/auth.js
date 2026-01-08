@@ -26,7 +26,6 @@ window.onload = () => {
   }
 };
 
-
 // Loading Screen Logic
 function startLoading(callback) {
   const loader = document.getElementById("loader-wrapper");
@@ -34,7 +33,12 @@ function startLoading(callback) {
   const text = document.getElementById("loader-text");
   let width = 0;
 
-  const messages = ["Initializing...", "Linking to engine...", "Loading User Interface...", "Ready."];
+  const messages = [
+    "Initializing...",
+    "Linking to engine...",
+    "Loading User Interface...",
+    "Ready.",
+  ];
 
   const interval = setInterval(() => {
     if (width >= 100) {
