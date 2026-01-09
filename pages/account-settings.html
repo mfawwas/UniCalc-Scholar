@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | UniCalc Scholar</title>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+  </head>
+  <body class="light-mode">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-icon"><ion-icon name="school"></ion-icon></div>
+          <div class="logo-text">UniCalc</div>
+        </div>
+
+        <nav class="nav-menu">
+          <div class="nav-label">Menu</div>
+          <a href="dashboard.html" class="nav-item active">
+            <ion-icon name="grid-outline"></ion-icon>
+            <span>Dashboard</span>
+          </a>
+          <a href="#" class="nav-item">
+            <ion-icon name="folder-open-outline"></ion-icon>
+            <span>Academic Records</span>
+          </a>
+          <a href="#" class="nav-item">
+            <ion-icon name="calculator-outline"></ion-icon>
+            <span>CGPA Calculator</span>
+          </a>
+          <a href="#" class="nav-item">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>Transcripts</span>
+          </a>
+
+          <div class="nav-label">Preferences</div>
+          <a href="#" class="nav-item">
+            <ion-icon name="settings-outline"></ion-icon>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="user-profile-container" id="profile-trigger">
+          <div class="profile-dropup" id="profile-menu">
+            <a href="account-settings.html" class="dropup-item">
+              <ion-icon name="settings-outline"></ion-icon>
+              <span>Account Settings</span>
+            </a>
+            <a href="#" class="dropup-item">
+              <ion-icon name="stats-chart-outline"></ion-icon>
+              <span>View Metrics</span>
+            </a>
+            <div class="dropup-divider"></div>
+            <a
+              href="../auth/login.html"
+              target="_blank"
+              class="dropup-item danger"
+            >
+              <ion-icon name="log-out-outline"></ion-icon>
+              <span>Logout</span>
+            </a>
+          </div>
+
+          <div class="user-mini-profile">
+            <div class="avatar">JK</div>
+            <div class="user-info">
+              <span class="name">John Kuame</span>
+              <span class="role">Student</span>
+            </div>
+            <button
+              class="btn-icon"
+              id="theme-toggle-btn"
+              onclick="toggleTheme(event)"
+            >
+              <ion-icon name="moon-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-bar">
+          <button class="menu-toggle" id="menu-open">
+            <ion-icon name="menu-outline"></ion-icon>
+          </button>
+        </header>
+
+        <div class="settings-container">
+          <header class="settings-header">
+            <h1>Account Settings</h1>
+            <p>Manage your profile and academic preferences.</p>
+          </header>
+
+          <!--Navigation Tab-->
+          <div class="settings-tabs">
+            <button
+              class="tab-btn active"
+              onclick="switchTab(event, 'profile')"
+            >
+              Profile
+            </button>
+            <button class="tab-btn" onclick="switchTab(event, 'academic')">
+              Academic Info
+            </button>
+            <button class="tab-btn" onclick="switchTab(event, 'security')">
+              Security
+            </button>
+          </div>
+
+          <div id="profile" class="tab-content active">
+            <div class="settings-section">
+              <div class="section-info">
+                <h3>Public Profile</h3>
+                <p>
+                  This information will be visible on your generated
+                  transcripts.
+                </p>
+              </div>
+              <div class="section-inputs">
+                <div class="input-row">
+                  <div class="input-group-settings">
+                    <label>Full Name</label>
+                    <input type="text" value="John Kuame" />
+                  </div>
+                </div>
+                <div class="input-row">
+                  <div class="input-group-settings">
+                    <label>Email Address</label>
+                    <input type="email" value="john.k@university.edu" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <div class="section-info">
+                <h3>Profile Picture</h3>
+                <p>
+                  This will be used across the platform and on your digital ID.
+                </p>
+              </div>
+              <div class="section-inputs">
+                <div class="profile-upload">
+                  <div class="avatar-large" id="avatar-preview">JK</div>
+                  <input
+                    type="file"
+                    id="profile-upload-input"
+                    hidden
+                    accept="image/*"
+                  />
+                  <button class="btn-secondary" onclick="triggerUpload()">
+                    <ion-icon name="camera-outline"></ion-icon> Change Photo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Academic tab -->
+          <div id="academic" class="tab-content">
+            <div class="settings-section">
+              <div class="section-info">
+                <h3>University Details</h3>
+                <p>Ensure these details match your school records.</p>
+              </div>
+              <div class="section-inputs">
+                <div class="input-group-settings">
+                  <label>Institution</label>
+                  <input
+                    type="text"
+                    value="Federal University of Technology, Minna"
+                  />
+                </div>
+                <div class="input-group-settings">
+                  <label>Matric Number</label>
+                  <input
+                    type="text"
+                    value="2023/1/88776LM"
+                    readonly
+                    class="readonly-input"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security Tab -->
+          <div id="security" class="tab-content">
+            <div class="settings-section">
+              <div class="section-info">
+                <h3>Password</h3>
+                <p>Update your password regularly to stay secure.</p>
+              </div>
+              <div class="section-inputs constrained">
+                <div class="input-group-settings">
+                  <label>Current Password</label>
+                  <input type="password" id="current-password" />
+                </div>
+                <div class="input-group-settings">
+                  <label>New Password</label>
+                  <input type="password" id="new-password" />
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <div class="section-info">
+                <h3>Two-Factor Authentication</h3>
+                <p>Add an extra layer of security to your account.</p>
+              </div>
+              <div class="section-inputs">
+                <div class="toggle-container">
+                  <span class="text-main">Enable 2FA</span>
+                  <label class="switch">
+                    <input type="checkbox" id="2fa-toggle" />
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-footer">
+            <button class="btn-secondary">Cancel</button>
+            <button class="btn-primary">Save Changes</button>
+          </div>
+        </div>
+
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <script src="../assets/js/pages.js"></script>
+        <script type="module">
+          import {
+            triggerUpload,
+            attachProfileUploadPreview,
+            saveSettings,
+          } from "../assets/js/modules/image.js";
+
+          attachProfileUploadPreview();
+
+          document
+            .getElementById("upload-btn")
+            .addEventListener("click", () => triggerUpload());
+
+          document
+            .getElementById("saveBtn")
+            .addEventListener("click", saveSettings);
+        </script>
+      </main>
+    </div>
+  </body>
+</html>

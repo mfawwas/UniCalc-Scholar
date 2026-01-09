@@ -520,75 +520,59 @@ button {
   padding: 30px 0;
 }
 
-/* Responsive design */
-/* 1. Hide Hamburger by default (Desktop) */
-.menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  color: var(--text-main);
-  cursor: pointer;
-  padding: 0;
-  margin-right: 15px;
+
+function toggleTheme(event) {
+  if (event) event.stopPropagation();
+
+  const body = document.body;
+  const btn = document.getElementById("theme-toggle-btn");
+  const icon = btn.querySelector("ion-icon");
+
+  body.classList.toggle("dark-mode");
+
+  if (body.classList.contains("dark-mode")) {
+    icon.setAttribute("name", "sunny-outline");
+    localStorage.setItem("theme", "dark");
+  } else {
+    icon.setAttribute("name", "moon-outline");
+    localStorage.setItem("theme", "light");
+  }
 }
 
-/* 2. Mobile Specific Styles (Break at 768px) */
-@media (max-width: 768px) {
-  .app-shell {
-    grid-template-columns: 1fr; /* Sidebar is no longer a column */
-  }
+window.addEventListener("load", () => {
+  const savedTheme = localStorage.getItem("theme");
+  const icon = document.querySelector("#theme-toggle-btn ion-icon");
 
-  .menu-toggle {
-    display: block; /* Show hamburger */
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark-mode");
+    icon.setAttribute("name", "sunny-outline");
   }
+});
 
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -280px; /* Hide off-screen */
-    width: 260px;
-    height: 100vh;
-    z-index: 1000;
-    transition: transform 0.3s ease-in-out;
-    box-shadow: 10px 0 15px rgba(0, 0, 0, 0.1);
-  }
+const profileTrigger = document.getElementById("profile-trigger");
+const profileMenu = document.getElementById("profile-menu");
 
-  .sidebar.open {
-    transform: translateX(280px); /* Slide into view */
-  }
+profileTrigger.addEventListener("click", () => {
+  profileMenu.classList.toggle("active");
+});
 
-  /* The dim background */
-  .sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    display: none; /* Hidden by default */
-    z-index: 999;
-    backdrop-filter: blur(2px);
+document.addEventListener("click", (e) => {
+  if (!profileTrigger.contains(e.target)) {
+    profileMenu.classList.remove("active");
   }
+});
 
-  .sidebar-overlay.active {
-    display: block;
-  }
+// Tab switching logic
+function switchTab(event, tabId) {
+  // 1. Remove active class from all buttons
+  const tabs = document.querySelectorAll(".tab-btn");
+  tabs.forEach((tab) => tab.classList.remove("active"));
 
-  .main-content {
-    padding: 20px; /* Tighter padding for small screens */
-  }
+  // 2. Hide all tab content
+  const contents = document.querySelectorAll(".tab-content");
+  contents.forEach((content) => content.classList.remove("active"));
 
-  .stats-grid {
-    grid-template-columns: 1fr; /* Stack cards vertically */
-  }
-
-  .settings-section {
-    grid-template-columns: 1fr; /* Stack settings labels on top of inputs */
-    gap: 15px;
-  }
-
-  .btn-primary {
-    display: none;
-  }
+  // 3. Add active class to clicked button and target content
+  event.currentTarget.classList.add("active");
+  document.getElementById(tabId).classList.add("active");
 }
