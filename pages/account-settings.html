@@ -237,23 +237,7 @@
         <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
         <script src="../assets/js/pages.js"></script>
-        <script type="module">
-          import {
-            triggerUpload,
-            attachProfileUploadPreview,
-            saveSettings,
-          } from "../assets/js/modules/image.js";
-
-          attachProfileUploadPreview();
-
-          document
-            .getElementById("upload-btn")
-            .addEventListener("click", () => triggerUpload());
-
-          document
-            .getElementById("saveBtn")
-            .addEventListener("click", saveSettings);
-        </script>
+        <script src="../assets/js/modules/image.js"></script>
       </main>
     </div>
   </body>
