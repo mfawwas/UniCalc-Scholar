@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | UniCalc Scholar</title>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+  </head>
+  <body class="light-mode">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-icon"><ion-icon name="school"></ion-icon></div>
+          <div class="logo-text">UniCalc</div>
+        </div>
+
+        <nav class="nav-menu">
+          <div class="nav-label">Menu</div>
+          <a href="dashboard.html" class="nav-item">
+            <ion-icon name="grid-outline"></ion-icon>
+            <span>Dashboard</span>
+          </a>
+          <a href="academic-records.html" class="nav-item active">
+            <ion-icon name="folder-open-outline"></ion-icon>
+            <span>Academic Records</span>
+          </a>
+          <a href="#" class="nav-item">
+            <ion-icon name="calculator-outline"></ion-icon>
+            <span>CGPA Calculator</span>
+          </a>
+          <a href="#" class="nav-item">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>Transcripts</span>
+          </a>
+
+          <div class="nav-label">Preferences</div>
+          <a href="#" class="nav-item">
+            <ion-icon name="settings-outline"></ion-icon>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="user-profile-container" id="profile-trigger">
+          <div class="profile-dropup" id="profile-menu">
+            <a href="account-settings.html" class="dropup-item">
+              <ion-icon name="settings-outline"></ion-icon>
+              <span>Account Settings</span>
+            </a>
+            <a href="#" class="dropup-item">
+              <ion-icon name="stats-chart-outline"></ion-icon>
+              <span>View Metrics</span>
+            </a>
+            <div class="dropup-divider"></div>
+            <a
+              href="../auth/login.html"
+              target="_blank"
+              class="dropup-item danger"
+            >
+              <ion-icon name="log-out-outline"></ion-icon>
+              <span>Logout</span>
+            </a>
+          </div>
+
+          <div class="user-mini-profile">
+            <div class="avatar">JK</div>
+            <div class="user-info">
+              <span class="name">John Kuame</span>
+              <span class="role">Student</span>
+            </div>
+            <button
+              class="btn-icon"
+              id="theme-toggle-btn"
+              onclick="toggleTheme(event)"
+            >
+              <ion-icon name="moon-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-bar">
+          <div class="header-left">
+            <button class="menu-toggle" id="menu-open">
+              <ion-icon name="menu-outline"></ion-icon>
+            </button>
+            <h1 class="page-title">Academic Records</h1>
+          </div>
+        </header>
+
+        <section class="records-overview">
+          <div class="progress-grid">
+            <div class="card q-card accent-orange">
+              <div class="chart-container">
+                <canvas id="gradProgressChart"></canvas>
+                <div class="percent-circle">75%</div>
+              </div>
+              <div class="q-card-body">
+                <span class="q-label">Degree Progress</span>
+                <div class="q-value">102 / 140</div>
+                <span class="q-sub">Units Completed</span>
+              </div>
+            </div>
+
+            <div class="card q-card accent-blue">
+              <div class="chart-container">
+                <canvas id="coreProgressChart"></canvas>
+                <div class="percent-circle">90%</div>
+              </div>
+              <div class="q-card-body">
+                <span class="q-label">Core Courses</span>
+                <div class="q-value">18 / 20</div>
+                <span class="q-sub">2 courses left</span>
+              </div>
+            </div>
+
+            <div class="card q-card accent-green">
+              <div class="chart-container">
+                <canvas id="electiveProgressChart"></canvas>
+                <div class="percent-circle">40%</div>
+              </div>
+              <div class="q-card-body">
+                <span class="q-label">Electives</span>
+                <div class="q-value">4 / 10</div>
+                <span class="q-sub">6 Units Left</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../assets/js/pages.js"></script>
+    <script src="../assets/js/modules/records.js"></script>
+  </body>
+</html>

@@ -80,3 +80,107 @@ navLinks.forEach((link) => {
     }
   });
 });
+
+// Data configured for future backend integration
+const cgpaHistory = {
+  labels: ["100L S1", "100L S2", "200L S1", "200L S2", "300L S1"],
+  values: [4.2, 3.85, 4.85, 4.5, 4.52],
+};
+
+function initDashboardChart() {
+  const ctx = document.getElementById("unicalcHeroChart").getContext("2d");
+
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: cgpaHistory.labels,
+      datasets: [
+        {
+          label: "CGPA",
+          data: cgpaHistory.values,
+          borderColor: "#0072ff",
+          backgroundColor: "rgba(0, 114, 255, 0.1)",
+          fill: true,
+          tension: 0.4, // This creates the smooth wave from the image
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          pointBackgroundColor: "#fff",
+          pointBorderColor: "#0072ff",
+          pointBorderWidth: 3,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+      },
+      scales: {
+        y: {
+          min: 0,
+          max: 5,
+          grid: { color: "rgba(0,0,0,0.05)" },
+        },
+        x: {
+          grid: { display: false },
+        },
+      },
+    },
+  });
+}
+
+// Call on load
+window.addEventListener("DOMContentLoaded", initDashboardChart);
+
+// Generic function to create progress rings
+const createProgressRing = (canvasId, percent, color) => {
+  const ctx = document.getElementById(canvasId).getContext("2d");
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      datasets: [
+        {
+          data: [percent, 100 - percent],
+          backgroundColor: [color, "rgba(0,0,0,0.05)"],
+          borderWidth: 0,
+          borderRadius: 10,
+        },
+      ],
+    },
+    options: {
+      cutout: "80%", // Makes the ring thin
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+    },
+  });
+};
+
+// Initialize all charts
+window.addEventListener("DOMContentLoaded", () => {
+  // Existing Hero Chart
+  initDashboardChart();
+
+  // Progress Rings (Using colors from your gradient cards)
+  createProgressRing("gradProgressChart", 75, "#ff8c42"); // Orange
+  createProgressRing("coreProgressChart", 90, "#00c6ff"); // Blue
+  createProgressRing("electiveProgressChart", 40, "#00b09b"); // Green
+});
+
+function updateChartTheme() {
+  const isDark = document.body.classList.contains("dark-mode");
+  const color = isDark ? "#94a3b8" : "#64748b";
+  const gridColor = isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)";
+
+  myChart.options.scales.x.ticks.color = color;
+  myChart.options.scales.y.ticks.color = color;
+  myChart.options.scales.y.grid.color = gridColor;
+  myChart.update();
+}
+
+// Ensure this is triggered when your theme toggle button is clicked
+document.getElementById("theme-toggle-btn").addEventListener("click", () => {
+  // ... your existing toggle logic ...
+  setTimeout(updateChartTheme, 100); // Small delay to catch class change
+});

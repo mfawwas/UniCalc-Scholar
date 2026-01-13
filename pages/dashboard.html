@@ -28,7 +28,7 @@
             <ion-icon name="grid-outline"></ion-icon>
             <span>Dashboard</span>
           </a>
-          <a href="#" class="nav-item">
+          <a href="academic-records.html" class="nav-item">
             <ion-icon name="folder-open-outline"></ion-icon>
             <span>Academic Records</span>
           </a>
@@ -59,7 +59,11 @@
               <span>View Metrics</span>
             </a>
             <div class="dropup-divider"></div>
-            <a href="../auth/login.html" target="_blank" class="dropup-item danger">
+            <a
+              href="../auth/login.html"
+              target="_blank"
+              class="dropup-item danger"
+            >
               <ion-icon name="log-out-outline"></ion-icon>
               <span>Logout</span>
             </a>
@@ -84,52 +88,73 @@
 
       <main class="main-content">
         <header class="top-bar">
-          <button class="menu-toggle" id="menu-open">
-            <ion-icon name="menu-outline"></ion-icon>
-          </button>
-          <h1 class="page-title">Dashboard</h1>
-          <div class="actions">
-            <button class="btn-secondary">
-              <ion-icon name="cloud-upload-outline"></ion-icon> Sync Data
+          <div class="header-left">
+            <button class="menu-toggle" id="menu-open">
+              <ion-icon name="menu-outline"></ion-icon>
             </button>
-            <button class="btn-primary">
-              <ion-icon name="add"></ion-icon> Add Semester
+            <h1 class="page-title">Dashboard</h1>
+          </div>
+          <div class="actions">
+            <button class="btn-secondary desktop-only">
+              <ion-icon name="cloud-upload-outline"></ion-icon> Sync Data
             </button>
           </div>
         </header>
 
-        <section class="stats-grid">
-          <div class="card stat-card hero">
-            <div class="stat-header">
-              <span>Current CGPA</span>
-              <ion-icon name="trending-up-outline"></ion-icon>
+        <section class="dashboard-overview">
+          <div class="summary-grid">
+            <div class="card q-card grad-orange accent-orange">
+              <div class="q-card-body">
+                <span class="q-label">Current CGPA</span>
+                <div class="q-value">4.52</div>
+                <span class="q-sub">Top 5% of Class</span>
+              </div>
+              <ion-icon name="trending-up" class="q-icon"></ion-icon>
             </div>
-            <div class="stat-value">4.52</div>
-            <div class="stat-footer">
-              <span class="badge success">First Class</span>
-              <span class="subtext">Top 5% of class</span>
+
+            <div class="card q-card grad-blue accent-blue">
+              <div class="q-card-body">
+                <span class="q-label">Total Units</span>
+                <div class="q-value">102</div>
+                <span class="q-sub">12 units this sem</span>
+              </div>
+              <ion-icon name="layers" class="q-icon"></ion-icon>
+            </div>
+
+            <div class="card q-card grad-lightblue accent-lightblue">
+              <div class="q-card-body">
+                <span class="q-label">Academic Level</span>
+                <div class="q-value">300L</div>
+                <span class="q-sub">Microbiology</span>
+              </div>
+              <ion-icon name="school" class="q-icon"></ion-icon>
+            </div>
+
+            <div class="card q-card grad-green accent-green">
+              <div class="q-card-body">
+                <span class="q-label">Status</span>
+                <div class="q-value">Active</div>
+                <span class="q-sub">Records Synced</span>
+              </div>
+              <ion-icon name="checkmark-circle" class="q-icon"></ion-icon>
             </div>
           </div>
 
-          <div class="card stat-card">
-            <div class="stat-header">
-              <span>Total Units</span>
-              <ion-icon name="layers-outline"></ion-icon>
+          <div class="card main-graph-card">
+            <div class="graph-header">
+              <div class="header-info">
+                <h3>CGPA Progression</h3>
+                <p>Growth over 5 semesters</p>
+              </div>
+              <div class="graph-actions">
+                <select class="graph-select">
+                  <option>Last 5 Semesters</option>
+                  <option>Full Career</option>
+                </select>
+              </div>
             </div>
-            <div class="stat-value">102</div>
-            <div class="stat-footer">
-              <span class="subtext">12 units this semester</span>
-            </div>
-          </div>
-
-          <div class="card stat-card">
-            <div class="stat-header">
-              <span>Level</span>
-              <ion-icon name="library-outline"></ion-icon>
-            </div>
-            <div class="stat-value">300L</div>
-            <div class="stat-footer">
-              <span class="subtext">Microbiology</span>
+            <div class="chart-wrapper">
+              <canvas id="unicalcHeroChart"></canvas>
             </div>
           </div>
         </section>
@@ -174,5 +199,6 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <script src="../assets/js/pages.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </body>
 </html>
