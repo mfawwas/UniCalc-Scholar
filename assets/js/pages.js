@@ -39,40 +39,31 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Tab switching logic
 function switchTab(event, tabId) {
-  // 1. Remove active class from all buttons
   const tabs = document.querySelectorAll(".tab-btn");
   tabs.forEach((tab) => tab.classList.remove("active"));
 
-  // 2. Hide all tab content
   const contents = document.querySelectorAll(".tab-content");
   contents.forEach((content) => content.classList.remove("active"));
 
-  // 3. Add active class to clicked button and target content
   event.currentTarget.classList.add("active");
   document.getElementById(tabId).classList.add("active");
 }
 
-// Sidebar Mobile
 const sidebar = document.querySelector(".sidebar");
 const menuOpenBtn = document.getElementById("menu-open");
 const overlay = document.getElementById("sidebar-overlay");
 const navLinks = document.querySelectorAll(".nav-item");
 
-// Function to Open/Close Menu
 function toggleMobileMenu() {
   sidebar.classList.toggle("open");
   overlay.classList.toggle("active");
 }
 
-// Event Listeners
 menuOpenBtn.addEventListener("click", toggleMobileMenu);
 
-// Close menu if user clicks the overlay (dimmed area)
 overlay.addEventListener("click", toggleMobileMenu);
 
-// Close menu if a user clicks a navigation link (Essential for mobile)
 navLinks.forEach((link) => {
   link.addEventListener("click", () => {
     if (window.innerWidth <= 768) {
@@ -81,7 +72,6 @@ navLinks.forEach((link) => {
   });
 });
 
-// Data configured for future backend integration
 const cgpaHistory = {
   labels: ["100L S1", "100L S2", "200L S1", "200L S2", "300L S1"],
   values: [4.2, 3.85, 4.85, 4.5, 4.52],
@@ -101,7 +91,7 @@ function initDashboardChart() {
           borderColor: "#0072ff",
           backgroundColor: "rgba(0, 114, 255, 0.1)",
           fill: true,
-          tension: 0.4, // This creates the smooth wave from the image
+          tension: 0.4,
           pointRadius: 6,
           pointHoverRadius: 8,
           pointBackgroundColor: "#fff",
@@ -130,10 +120,8 @@ function initDashboardChart() {
   });
 }
 
-// Call on load
 window.addEventListener("DOMContentLoaded", initDashboardChart);
 
-// Generic function to create progress rings
 const createProgressRing = (canvasId, percent, color) => {
   const ctx = document.getElementById(canvasId).getContext("2d");
   new Chart(ctx, {
@@ -149,7 +137,7 @@ const createProgressRing = (canvasId, percent, color) => {
       ],
     },
     options: {
-      cutout: "80%", // Makes the ring thin
+      cutout: "80%",
       responsive: true,
       maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { enabled: false } },
@@ -157,15 +145,12 @@ const createProgressRing = (canvasId, percent, color) => {
   });
 };
 
-// Initialize all charts
 window.addEventListener("DOMContentLoaded", () => {
-  // Existing Hero Chart
   initDashboardChart();
 
-  // Progress Rings (Using colors from your gradient cards)
-  createProgressRing("gradProgressChart", 75, "#ff8c42"); // Orange
-  createProgressRing("coreProgressChart", 90, "#00c6ff"); // Blue
-  createProgressRing("electiveProgressChart", 40, "#00b09b"); // Green
+  createProgressRing("gradProgressChart", 75, "#ff8c42");
+  createProgressRing("coreProgressChart", 90, "#00c6ff");
+  createProgressRing("electiveProgressChart", 40, "#00b09b");
 });
 
 function updateChartTheme() {
@@ -179,8 +164,6 @@ function updateChartTheme() {
   myChart.update();
 }
 
-// Ensure this is triggered when your theme toggle button is clicked
 document.getElementById("theme-toggle-btn").addEventListener("click", () => {
-  // ... your existing toggle logic ...
-  setTimeout(updateChartTheme, 100); // Small delay to catch class change
+  setTimeout(updateChartTheme, 100);
 });

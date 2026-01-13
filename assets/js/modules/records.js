@@ -1,4 +1,3 @@
-// Reusable function for the progress rings
 const initRing = (id, percent, color) => {
   const ctx = document.getElementById(id).getContext("2d");
   new Chart(ctx, {
@@ -23,8 +22,6 @@ const initRing = (id, percent, color) => {
 };
 
 window.addEventListener("DOMContentLoaded", () => {
-  // We use white for the rings in light mode (over gradients)
-  // and theme colors for dark mode
   const isDark = document.body.classList.contains("dark-mode");
 
   const colors = {
