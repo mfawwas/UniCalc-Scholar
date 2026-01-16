@@ -3,13 +3,42 @@ const GRADE_POINTS = { A: 5, B: 4, C: 3, D: 2, E: 1, F: 0 };
 let yearCounter = 0;
 
 window.onload = () => {
-  const savedData = localStorage.getItem("unicalc_data");
-  if (savedData) {
-    loadFromLocalStorage(savedData);
-  } else {
+  loadRecordsFromBackend();
+};
+
+async function loadRecordsFromBackend() {
+  try {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      addNewYear();
+      return;
+    }
+
+    const response = await fetch("/api/records/load", {
+      headers: { "Authorization": `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      console.error("Failed to load records");
+      addNewYear();
+      return;
+    }
+
+    const result = await response.json();
+    const data = result.data;
+
+    if (!data.years || data.years.length === 0) {
+      addNewYear();
+      return;
+    }
+
+    loadRecordsToUI(data);
+    yearCounter = data.years.length;
+  } catch (error) {
+    console.error("Error loading records:", error);
     addNewYear();
   }
-};
+}
 
 function addNewYear() {
   yearCounter++;
@@ -128,11 +157,40 @@ function saveToLocalStorage() {
 
   for (let i = 1; i <= yearCounter; i++) {
     data.years.push({
-      s1: getSemesterData(`year-${i}-s1`),
-      s2: getSemesterData(`year-${i}-s2`),
+      yearNumber: i,
+      sem1: getSemesterData(`year-${i}-s1`),
+      sem2: getSemesterData(`year-${i}-s2`),
     });
   }
-  localStorage.setItem("unicalc_data", JSON.stringify(data));
+
+  saveRecordsToBackend(data);
+}
+
+async function saveRecordsToBackend(data) {
+  try {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.warn("No auth token, data not saved to backend");
+      return;
+    }
+
+    const response = await fetch("/api/records/save", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to save records");
+    }
+
+    console.log("Records saved successfully");
+  } catch (error) {
+    console.error("Error saving records:", error);
+  }
 }
 
 function getSemesterData(tbodyId) {
@@ -154,11 +212,77 @@ function loadFromLocalStorage(savedJSON) {
 
   data.years.forEach((year, index) => {
     const yearId = addNewYear();
-    // Clear the default rows created by addNewYear before loading saved ones
     document.getElementById(`${yearId}-s1`).innerHTML = "";
     document.getElementById(`${yearId}-s2`).innerHTML = "";
 
-    fillSemesterTable(`${yearId}-s1`, year.s1);
+    (year.sem1 || []).forEach((course) => {
+      addRowWithData(`${yearId}-s1`, course);
+    });
+
+    (year.sem2 || []).forEach((course) => {
+      addRowWithData(`${yearId}-s2`, course);
+    });
+  });
+
+  calculate();
+}
+
+function loadRecordsToUI(data) {
+  if (document.getElementById("studentName"))
+    document.getElementById("studentName").value = data.studentName || "";
+  if (document.getElementById("matricNo"))
+    document.getElementById("matricNo").value = data.matricNo || "";
+
+  data.years.forEach((year) => {
+    const yearId = addNewYear();
+    document.getElementById(`${yearId}-s1`).innerHTML = "";
+    document.getElementById(`${yearId}-s2`).innerHTML = "";
+
+    (year.sem1 || []).forEach((course) => {
+      addRowWithData(`${yearId}-s1`, course);
+    });
+
+    (year.sem2 || []).forEach((course) => {
+      addRowWithData(`${yearId}-s2`, course);
+    });
+  });
+
+  calculate();
+}
+
+function addRowWithData(tbodyId, courseData) {
+  const tbody = document.getElementById(tbodyId);
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td></td>
+    <td><input type="text" class="c-code" value="${courseData.code || ""}" placeholder="e.g. MTH101" oninput="calculate()"></td>
+    <td>
+      <select class="c-unit" onchange="calculate()">
+        <option value="0">-</option>
+        <option value="1" ${courseData.unit == 1 ? "selected" : ""}>1</option>
+        <option value="2" ${courseData.unit == 2 ? "selected" : ""}>2</option>
+        <option value="3" ${courseData.unit == 3 ? "selected" : ""}>3</option>
+        <option value="4" ${courseData.unit == 4 ? "selected" : ""}>4</option>
+        <option value="5" ${courseData.unit == 5 ? "selected" : ""}>5</option>
+        <option value="6" ${courseData.unit == 6 ? "selected" : ""}>6</option>
+      </select>
+    </td>
+    <td>
+      <select class="c-grade" onchange="calculate()">
+        <option value="">-</option>
+        <option value="A" ${courseData.grade == "A" ? "selected" : ""}>A</option>
+        <option value="B" ${courseData.grade == "B" ? "selected" : ""}>B</option>
+        <option value="C" ${courseData.grade == "C" ? "selected" : ""}>C</option>
+        <option value="D" ${courseData.grade == "D" ? "selected" : ""}>D</option>
+        <option value="E" ${courseData.grade == "E" ? "selected" : ""}>E</option>
+        <option value="F" ${courseData.grade == "F" ? "selected" : ""}>F</option>
+      </select>
+    </td>
+    <td><button class="btn btn-remove" onclick="removeRow(this)">×</button></td>
+  `;
+  tbody.appendChild(row);
+  updateRowNumbers(tbody);
+}    fillSemesterTable(`${yearId}-s1`, year.s1);
     fillSemesterTable(`${yearId}-s2`, year.s2);
   });
   calculate();
@@ -332,7 +456,7 @@ function closeClearModal() {
 }
 
 function confirmClearAll() {
-  localStorage.removeItem("unicalc_data");
+  clearRecordsFromBackend();
 
   document.getElementById("studentName").value = "";
   document.getElementById("matricNo").value = "";
@@ -344,4 +468,18 @@ function confirmClearAll() {
 
   closeClearModal();
   alert("All records cleared successfully.");
+}
+
+async function clearRecordsFromBackend() {
+  try {
+    const token = localStorage.getItem("authToken");
+    if (!token) return;
+
+    await fetch("/api/records/clear", {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${token}` },
+    });
+  } catch (error) {
+    console.error("Error clearing records:", error);
+  }
 }

@@ -214,6 +214,7 @@ button {
   border-radius: var(--radius);
   padding: 24px;
   box-shadow: var(--shadow);
+  overflow: hidden;
 }
 
 .section-header {
@@ -227,11 +228,6 @@ button {
   font-size: 1.1rem;
   font-weight: 700;
   margin-top: 11px;
-}
-
-.activity-table {
-  padding: 0;
-  overflow: hidden;
 }
 
 .table-row {
@@ -251,30 +247,6 @@ button {
   font-weight: 600;
   font-size: 0.85rem;
   color: var(--text-light);
-}
-
-.col {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.95rem;
-}
-
-.status-pill {
-  font-size: 0.75rem;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-weight: 600;
-}
-
-.status-pill.success {
-  background: #def7ec;
-  color: #03543f;
-}
-
-.status-pill.warning {
-  background: #fefcbf;
-  color: #744210;
 }
 
 .user-profile-container {
@@ -577,12 +549,6 @@ button {
   font-size: 0.85rem;
 }
 
-.main-content {
-  max-width: 1600px;
-  margin: 0 auto;
-  width: 100%;
-}
-
 .progress-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -595,28 +561,6 @@ button {
   width: 100px;
   height: 100px;
   flex-shrink: 0;
-}
-
-.chart-center-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-20%, -50%);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-}
-
-.chart-center-text .percent {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: #ffffff;
-}
-
-.chart-center-text .sub {
-  font-size: 0.6rem;
-  color: var(--text-light);
-  text-transform: uppercase;
 }
 
 .chart-wrapper {
@@ -800,14 +744,6 @@ button {
 
 .light-mode .percent-circle {
   background: rgba(0, 0, 0, 0.05);
-}
-
-.light-mode .chart-center-text {
-  color: white;
-}
-
-.dark-mode .chart-center-text {
-  color: var(--text-main);
 }
 
 @media (max-width: 480px) {

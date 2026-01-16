@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transcripts | UniCalc Scholar</title>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+
+    <style>
+      .coming-soon-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: calc(100vh - 200px);
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .coming-soon-icon {
+        font-size: 5rem;
+        margin-bottom: 30px;
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      .coming-soon-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--primary);
+        margin-bottom: 15px;
+      }
+
+      .coming-soon-description {
+        font-size: 1.1rem;
+        color: var(--text-light);
+        max-width: 600px;
+        margin-bottom: 40px;
+        line-height: 1.6;
+      }
+
+      .coming-soon-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        max-width: 800px;
+        margin-bottom: 50px;
+        width: 100%;
+      }
+
+      .feature-item {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .feature-icon {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+      }
+
+      .feature-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 8px;
+      }
+
+      .feature-text {
+        font-size: 0.9rem;
+        color: var(--text-light);
+      }
+
+      .newsletter-section {
+        background: var(--card-bg);
+        border: 2px solid var(--accent-light);
+        border-radius: var(--radius);
+        padding: 40px 30px;
+        max-width: 500px;
+        width: 100%;
+      }
+
+      .newsletter-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 10px;
+      }
+
+      .newsletter-text {
+        font-size: 0.95rem;
+        color: var(--text-light);
+        margin-bottom: 25px;
+      }
+
+      .newsletter-form {
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+      }
+
+      .newsletter-input {
+        padding: 12px 15px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        font-size: 0.95rem;
+        background: var(--card-bg);
+        color: var(--text-main);
+        outline: none;
+      }
+
+      .newsletter-input:focus {
+        border-color: var(--primary);
+      }
+
+      .newsletter-input::placeholder {
+        color: var(--text-light);
+      }
+
+      .newsletter-button {
+        padding: 12px 24px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius);
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .newsletter-button:hover {
+        background: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .newsletter-success {
+        display: none;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .newsletter-success.show {
+        display: block;
+      }
+
+      .success-icon {
+        font-size: 3rem;
+        color: #10b981;
+        margin-bottom: 10px;
+      }
+
+      .success-message {
+        font-size: 1rem;
+        color: var(--text-main);
+        font-weight: 600;
+      }
+
+      .dark-mode .newsletter-input {
+        background: var(--card-bg);
+        color: var(--text-main);
+        border-color: var(--border);
+      }
+
+      .dark-mode .feature-item {
+        background: var(--card-bg);
+        border-color: var(--border);
+      }
+
+      @media (max-width: 768px) {
+        .coming-soon-title {
+          font-size: 2rem;
+        }
+
+        .coming-soon-description {
+          font-size: 1rem;
+        }
+
+        .coming-soon-features {
+          grid-template-columns: 1fr;
+        }
+
+        .newsletter-section {
+          padding: 30px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body class="light-mode">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-icon"><ion-icon name="school"></ion-icon></div>
+          <div class="logo-text">UniCalc</div>
+        </div>
+
+        <nav class="nav-menu">
+          <div class="nav-label">Menu</div>
+          <a href="dashboard.html" class="nav-item">
+            <ion-icon name="grid-outline"></ion-icon>
+            <span>Dashboard</span>
+          </a>
+          <a href="academic-records.html" class="nav-item">
+            <ion-icon name="folder-open-outline"></ion-icon>
+            <span>Academic Records</span>
+          </a>
+          <a href="cgpa-calculator.html" class="nav-item">
+            <ion-icon name="calculator-outline"></ion-icon>
+            <span>CGPA Calculator</span>
+          </a>
+          <a href="transcripts.html" class="nav-item active">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>Transcripts</span>
+          </a>
+
+          <div class="nav-label">Preferences</div>
+          <a href="#" class="nav-item">
+            <ion-icon name="settings-outline"></ion-icon>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="user-profile-container" id="profile-trigger">
+          <div class="profile-dropup" id="profile-menu">
+            <a href="account-settings.html" class="dropup-item">
+              <ion-icon name="settings-outline"></ion-icon>
+              <span>Account Settings</span>
+            </a>
+            <a href="view-metrics.html" class="dropup-item">
+              <ion-icon name="stats-chart-outline"></ion-icon>
+              <span>View Metrics</span>
+            </a>
+            <div class="dropup-divider"></div>
+            <a
+              href="../auth/login.html"
+              target="_blank"
+              class="dropup-item danger"
+            >
+              <ion-icon name="log-out-outline"></ion-icon>
+              <span>Logout</span>
+            </a>
+          </div>
+
+          <div class="user-mini-profile">
+            <div class="avatar">JK</div>
+            <div class="user-info">
+              <span class="name">John Kuame</span>
+              <span class="role">Student</span>
+            </div>
+            <button
+              class="btn-icon"
+              id="theme-toggle-btn"
+              onclick="toggleTheme(event)"
+            >
+              <ion-icon name="moon-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-bar">
+          <div class="header-left">
+            <button class="menu-toggle" id="menu-open">
+              <ion-icon name="menu-outline"></ion-icon>
+            </button>
+            <h1 class="page-title">Transcripts</h1>
+          </div>
+        </header>
+
+        <div class="coming-soon-container">
+          <div class="coming-soon-icon"><ion-icon name="document-text-outline"></ion-icon></div>
+
+          <h2 class="coming-soon-title">Coming Soon</h2>
+
+          <p class="coming-soon-description">
+            We're preparing an official transcript management system to generate,
+            download, and share your academic records with institutions.
+          </p>
+
+          <div class="coming-soon-features">
+            <div class="feature-item">
+              <div class="feature-icon"><ion-icon name="document-outline"></ion-icon></div>
+              <div class="feature-title">Official Transcripts</div>
+              <div class="feature-text">
+                Generate certified academic transcripts
+              </div>
+            </div>
+
+            <div class="feature-item">
+              <div class="feature-icon"><ion-icon name="download-outline"></ion-icon></div>
+              <div class="feature-title">Download & Archive</div>
+              <div class="feature-text">
+                Save transcripts in multiple formats
+              </div>
+            </div>
+
+            <div class="feature-item">
+              <div class="feature-icon"><ion-icon name="share-social-outline"></ion-icon></div>
+              <div class="feature-title">Share Records</div>
+              <div class="feature-text">
+                Securely share transcripts with institutions
+              </div>
+            </div>
+
+            <div class="feature-item">
+              <div class="feature-icon"><ion-icon name="create-outline"></ion-icon></div>
+              <div class="feature-title">Customizable Reports</div>
+              <div class="feature-text">
+                Create tailored transcript reports for any purpose
+              </div>
+            </div>
+
+            <div class="feature-item">
+              <div class="feature-icon"><ion-icon name="lock-closed-outline"></ion-icon></div>
+              <div class="feature-title">Secure & Verified</div>
+              <div class="feature-text">
+                Digitally signed and institution-verified documents
+              </div>
+            </div>
+
+            <div class="feature-item">
+              <div class="feature-icon"><ion-icon name="mail-outline"></ion-icon></div>
+              <div class="feature-title">Direct Submission</div>
+              <div class="feature-text">
+                Send transcripts directly to educational bodies
+              </div>
+            </div>
+          </div>
+
+          <div class="newsletter-section">
+            <div class="newsletter-title">Get Notified</div>
+            <p class="newsletter-text">
+              Be the first to know when transcripts become available
+            </p>
+
+            <div class="newsletter-form" id="newsletterForm">
+              <input
+                type="email"
+                class="newsletter-input"
+                id="newsletterEmail"
+                placeholder="Enter your email"
+                required
+              />
+              <button class="newsletter-button" onclick="subscribeNewsletter()">
+                Notify Me
+              </button>
+            </div>
+
+            <div class="newsletter-success" id="newsletterSuccess">
+              <div class="success-icon"><ion-icon name="checkmark-circle-outline"></ion-icon></div>
+              <div class="success-message">
+                Thanks for subscribing! We'll notify you soon.
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <script src="../assets/js/pages.js"></script>
+    <script>
+      async function subscribeNewsletter() {
+        const email = document.getElementById("newsletterEmail").value;
+        if (!email || !email.includes("@")) {
+          alert("Please enter a valid email address");
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/newsletter/subscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, type: "transcripts" }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to subscribe");
+          }
+
+          document.getElementById("newsletterForm").style.display = "none";
+          document.getElementById("newsletterSuccess").classList.add("show");
+        } catch (error) {
+          alert("Error subscribing: " + error.message);
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const email = prompt("Enter your email to check subscription:") || "";
+          if (!email) return;
+
+          const response = await fetch(
+            `/api/newsletter/check?email=${encodeURIComponent(email)}&type=transcripts`
+          );
+          const result = await response.json();
+
+          if (result.isSubscribed) {
+            document.getElementById("newsletterForm").style.display = "none";
+            document.getElementById("newsletterSuccess").classList.add("show");
+          }
+        } catch (error) {
+          console.error("Error checking subscription:", error);
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -32,11 +32,11 @@
             <ion-icon name="folder-open-outline"></ion-icon>
             <span>Academic Records</span>
           </a>
-          <a href="#" class="nav-item">
+          <a href="cgpa-calculator.html" class="nav-item">
             <ion-icon name="calculator-outline"></ion-icon>
             <span>CGPA Calculator</span>
           </a>
-          <a href="#" class="nav-item">
+          <a href="transcripts.html" class="nav-item">
             <ion-icon name="document-text-outline"></ion-icon>
             <span>Transcripts</span>
           </a>
@@ -54,7 +54,7 @@
               <ion-icon name="settings-outline"></ion-icon>
               <span>Account Settings</span>
             </a>
-            <a href="#" class="dropup-item">
+            <a href="view-metrics.html" class="dropup-item">
               <ion-icon name="stats-chart-outline"></ion-icon>
               <span>View Metrics</span>
             </a>
@@ -101,7 +101,6 @@
             <h1>Account Settings</h1>
             <p>Manage your profile and academic preferences.</p>
           </header>
-          <!--Navigation Tab-->
           <div class="settings-tabs">
             <button
               class="tab-btn active"
@@ -129,16 +128,31 @@
               <div class="section-inputs">
                 <div class="input-row">
                   <div class="input-group-settings">
-                    <label>Full Name</label>
-                    <input type="text" value="John Kuame" />
+                    <label>First Name</label>
+                    <input type="text" id="firstName" placeholder="Enter first name" />
+                  </div>
+                </div>
+                <div class="input-row">
+                  <div class="input-group-settings">
+                    <label>Last Name</label>
+                    <input type="text" id="lastName" placeholder="Enter last name" />
                   </div>
                 </div>
                 <div class="input-row">
                   <div class="input-group-settings">
                     <label>Email Address</label>
-                    <input type="email" value="john.k@university.edu" />
+                    <input type="email" id="email" placeholder="your.email@university.edu" readonly class="readonly-input" />
                   </div>
                 </div>
+                <div class="input-row">
+                  <div class="input-group-settings">
+                    <label>Phone Number</label>
+                    <input type="tel" id="phone" placeholder="+234 (0) 9XX XXX XXXX" />
+                  </div>
+                </div>
+              </div>
+              <div class="section-actions">
+                <button class="btn-primary" onclick="saveAccountSettings()">Save Profile</button>
               </div>
             </div>
 
@@ -161,12 +175,14 @@
                   <button class="btn-secondary" onclick="triggerUpload()">
                     <ion-icon name="camera-outline"></ion-icon> Change Photo
                   </button>
+                  <button class="btn-secondary" onclick="deleteProfileImage()" id="delete-profile-btn" style="display:none;">
+                    <ion-icon name="trash-outline"></ion-icon> Delete Photo
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Academic tab -->
           <div id="academic" class="tab-content">
             <div class="settings-section">
               <div class="section-info">
@@ -178,61 +194,93 @@
                   <label>Institution</label>
                   <input
                     type="text"
-                    value="Federal University of Technology, Minna"
+                    id="institution"
+                    placeholder="Federal University of Technology, Minna"
+                  />
+                </div>
+                <div class="input-group-settings">
+                  <label>Department</label>
+                  <input
+                    type="text"
+                    id="department"
+                    placeholder="e.g., Computer Science"
                   />
                 </div>
                 <div class="input-group-settings">
                   <label>Matric Number</label>
                   <input
                     type="text"
-                    value="2023/1/88776LM"
+                    id="matricNo"
+                    placeholder="e.g., 2023/1/88776LM"
                     readonly
                     class="readonly-input"
                   />
                 </div>
+                <div class="input-group-settings">
+                  <label>Current Level</label>
+                  <select id="currentLevel">
+                    <option value="">Select Level</option>
+                    <option value="100">100 Level</option>
+                    <option value="200">200 Level</option>
+                    <option value="300">300 Level</option>
+                    <option value="400">400 Level</option>
+                  </select>
+                </div>
+              </div>
+              <div class="section-actions">
+                <button class="btn-primary" onclick="saveAcademicSettings()">Save Academic Info</button>
               </div>
             </div>
           </div>
 
-          <!-- Security Tab -->
           <div id="security" class="tab-content">
             <div class="settings-section">
               <div class="section-info">
-                <h3>Password</h3>
+                <h3>Change Password</h3>
                 <p>Update your password regularly to stay secure.</p>
               </div>
               <div class="section-inputs constrained">
                 <div class="input-group-settings">
                   <label>Current Password</label>
-                  <input type="password" id="current-password" />
+                  <input type="password" id="current-password" placeholder="Enter current password" />
                 </div>
                 <div class="input-group-settings">
                   <label>New Password</label>
-                  <input type="password" id="new-password" />
+                  <input type="password" id="new-password" placeholder="Enter new password (8+ characters)" />
                 </div>
+                <div class="input-group-settings">
+                  <label>Confirm New Password</label>
+                  <input type="password" id="confirm-password" placeholder="Confirm new password" />
+                </div>
+              </div>
+              <div class="section-actions">
+                <button class="btn-primary" onclick="changePassword()">Update Password</button>
               </div>
             </div>
 
             <div class="settings-section">
               <div class="section-info">
-                <h3>Two-Factor Authentication</h3>
-                <p>Add an extra layer of security to your account.</p>
+                <h3>Account Recovery</h3>
+                <p>Set up recovery options to protect your account.</p>
               </div>
               <div class="section-inputs">
-                <div class="toggle-container">
-                  <span class="text-main">Enable 2FA</span>
-                  <label class="switch">
-                    <input type="checkbox" id="2fa-toggle" />
-                    <span class="slider round"></span>
-                  </label>
+                <div class="input-group-settings">
+                  <label>Recovery Email (Optional)</label>
+                  <input type="email" id="recovery-email" placeholder="recovery@email.com" />
                 </div>
+                <div class="input-group-settings">
+                  <label>Recovery Phone (Optional)</label>
+                  <input type="tel" id="recovery-phone" placeholder="+234 (0) 9XX XXX XXXX" />
+                </div>
+              </div>
+              <div class="section-actions">
+                <button class="btn-primary" onclick="saveSecuritySettings()">Save Security Settings</button>
               </div>
             </div>
           </div>
 
           <div class="settings-footer">
-            <button class="btn-secondary">Cancel</button>
-            <button class="btn-primary">Save Changes</button>
+            <div id="status-message" style="display:none; padding: 10px; margin-bottom: 10px; border-radius: 4px;"></div>
           </div>
         </div>
 
@@ -240,6 +288,263 @@
 
         <script src="../assets/js/pages.js"></script>
         <script src="../assets/js/modules/image.js"></script>
+        <script>
+          function getAuthToken() {
+            return localStorage.getItem("authToken");
+          }
+
+          function showStatus(message, type = "success") {
+            const statusElement = document.getElementById("status-message");
+            statusElement.textContent = message;
+            statusElement.style.backgroundColor = type === "success" ? "#4CAF50" : "#f44336";
+            statusElement.style.color = "white";
+            statusElement.style.display = "block";
+            setTimeout(() => {
+              statusElement.style.display = "none";
+            }, 5000);
+          }
+
+          async function loadUserSettings() {
+            try {
+              const response = await fetch("/api/settings", {
+                method: "GET",
+                headers: {
+                  "Authorization": `Bearer ${getAuthToken()}`,
+                },
+              });
+
+              if (!response.ok) throw new Error("Failed to load settings");
+
+              const data = await response.json();
+              if (data.success) {
+                const user = data.data;
+                document.getElementById("firstName").value = user.firstName || "";
+                document.getElementById("lastName").value = user.lastName || "";
+                document.getElementById("email").value = user.email || "";
+                document.getElementById("phone").value = user.phone || "";
+
+                if (user.academic) {
+                  document.getElementById("institution").value = user.academic.institution || "";
+                  document.getElementById("department").value = user.academic.department || "";
+                  document.getElementById("matricNo").value = user.academic.matricNo || "";
+                  document.getElementById("currentLevel").value = user.academic.currentLevel || "";
+                }
+
+                if (user.profileImage) {
+                  const initials = (user.firstName?.[0] || "") + (user.lastName?.[0] || "");
+                  document.getElementById("avatar-preview").textContent = initials || "U";
+                  document.getElementById("delete-profile-btn").style.display = "inline-block";
+                }
+              }
+            } catch (error) {
+              console.error("Error loading settings:", error);
+            }
+          }
+
+          async function saveAccountSettings() {
+            try {
+              const firstName = document.getElementById("firstName").value.trim();
+              const lastName = document.getElementById("lastName").value.trim();
+              const phone = document.getElementById("phone").value.trim();
+
+              if (!firstName || !lastName) {
+                showStatus("First name and last name are required", "error");
+                return;
+              }
+
+              const response = await fetch("/api/settings/account", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${getAuthToken()}`,
+                },
+                body: JSON.stringify({ firstName, lastName, phone }),
+              });
+
+              if (!response.ok) throw new Error("Failed to save account settings");
+
+              const data = await response.json();
+              if (data.success) {
+                showStatus("Account settings saved successfully");
+              }
+            } catch (error) {
+              showStatus("Error saving account settings: " + error.message, "error");
+            }
+          }
+
+          async function saveAcademicSettings() {
+            try {
+              const institution = document.getElementById("institution").value.trim();
+              const department = document.getElementById("department").value.trim();
+              const currentLevel = document.getElementById("currentLevel").value;
+
+              if (!institution || !department || !currentLevel) {
+                showStatus("All academic fields are required", "error");
+                return;
+              }
+
+              const response = await fetch("/api/settings/academic", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${getAuthToken()}`,
+                },
+                body: JSON.stringify({ institution, department, currentLevel }),
+              });
+
+              if (!response.ok) throw new Error("Failed to save academic settings");
+
+              const data = await response.json();
+              if (data.success) {
+                showStatus("Academic settings saved successfully");
+              }
+            } catch (error) {
+              showStatus("Error saving academic settings: " + error.message, "error");
+            }
+          }
+
+          async function changePassword() {
+            try {
+              const currentPassword = document.getElementById("current-password").value;
+              const newPassword = document.getElementById("new-password").value;
+              const confirmPassword = document.getElementById("confirm-password").value;
+
+              if (!currentPassword || !newPassword || !confirmPassword) {
+                showStatus("All password fields are required", "error");
+                return;
+              }
+
+              if (newPassword !== confirmPassword) {
+                showStatus("New passwords do not match", "error");
+                return;
+              }
+
+              if (newPassword.length < 8) {
+                showStatus("New password must be at least 8 characters", "error");
+                return;
+              }
+
+              const response = await fetch("/api/settings/password", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${getAuthToken()}`,
+                },
+                body: JSON.stringify({ currentPassword, newPassword }),
+              });
+
+              if (!response.ok) throw new Error("Failed to change password");
+
+              const data = await response.json();
+              if (data.success) {
+                showStatus("Password changed successfully");
+                document.getElementById("current-password").value = "";
+                document.getElementById("new-password").value = "";
+                document.getElementById("confirm-password").value = "";
+              }
+            } catch (error) {
+              showStatus("Error changing password: " + error.message, "error");
+            }
+          }
+
+          async function saveSecuritySettings() {
+            try {
+              const recoveryEmail = document.getElementById("recovery-email").value.trim();
+              const recoveryPhone = document.getElementById("recovery-phone").value.trim();
+
+              const response = await fetch("/api/settings/account", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${getAuthToken()}`,
+                },
+                body: JSON.stringify({ 
+                  phone: recoveryPhone || undefined,
+                }),
+              });
+
+              if (!response.ok) throw new Error("Failed to save security settings");
+
+              const data = await response.json();
+              if (data.success) {
+                showStatus("Security settings saved successfully");
+              }
+            } catch (error) {
+              showStatus("Error saving security settings: " + error.message, "error");
+            }
+          }
+
+          async function uploadProfileImage() {
+            try {
+              const fileInput = document.getElementById("profile-upload-input");
+              const file = fileInput.files[0];
+
+              if (!file) return;
+
+              if (file.size > 5 * 1024 * 1024) {
+                showStatus("File size must be less than 5MB", "error");
+                return;
+              }
+
+              const formData = new FormData();
+              formData.append("image", file);
+
+              const response = await fetch("/api/profile/upload-image", {
+                method: "POST",
+                headers: {
+                  "Authorization": `Bearer ${getAuthToken()}`,
+                },
+                body: formData,
+              });
+
+              if (!response.ok) throw new Error("Failed to upload image");
+
+              const data = await response.json();
+              if (data.success) {
+                showStatus("Profile image uploaded successfully");
+                const firstName = document.getElementById("firstName").value;
+                const lastName = document.getElementById("lastName").value;
+                const initials = (firstName?.[0] || "") + (lastName?.[0] || "");
+                document.getElementById("avatar-preview").textContent = initials || "U";
+                document.getElementById("delete-profile-btn").style.display = "inline-block";
+              }
+            } catch (error) {
+              showStatus("Error uploading image: " + error.message, "error");
+            }
+          }
+
+          async function deleteProfileImage() {
+            try {
+              if (!confirm("Are you sure you want to delete your profile image?")) return;
+
+              const response = await fetch("/api/profile/delete-image", {
+                method: "DELETE",
+                headers: {
+                  "Authorization": `Bearer ${getAuthToken()}`,
+                },
+              });
+
+              if (!response.ok) throw new Error("Failed to delete image");
+
+              const data = await response.json();
+              if (data.success) {
+                showStatus("Profile image deleted successfully");
+                document.getElementById("avatar-preview").textContent = "U";
+                document.getElementById("delete-profile-btn").style.display = "none";
+              }
+            } catch (error) {
+              showStatus("Error deleting image: " + error.message, "error");
+            }
+          }
+
+          function triggerUpload() {
+            document.getElementById("profile-upload-input").click();
+          }
+
+          document.getElementById("profile-upload-input").addEventListener("change", uploadProfileImage);
+
+          document.addEventListener("DOMContentLoaded", loadUserSettings);
+        </script>
       </main>
     </div>
   </body>

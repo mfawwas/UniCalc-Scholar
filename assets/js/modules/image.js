@@ -1,4 +1,3 @@
-// Trigger File Explorer
 function triggerUpload() {
   document.getElementById("profile-upload-input").click();
 }
@@ -19,8 +18,6 @@ document
           "cover";
       };
       reader.readAsDataURL(file);
-
-      // This 'file' object is what you will later send to your backend
       console.log("Ready to upload:", file.name);
     }
   });
@@ -32,7 +29,5 @@ function saveSettings() {
     university: document.getElementById("user-university").value,
     twoFactor: document.getElementById("2fa-toggle").checked,
   };
-
   console.log("Sending to Backend API...", data);
-  // Future: fetch('/api/settings', { method: 'POST', body: JSON.stringify(data) })
 }

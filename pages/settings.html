@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings | UniCalc Scholar</title>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <link rel="stylesheet" href="../assets/css/pages.css" />
+
+    <style>
+      .settings-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 30px 20px;
+      }
+
+      .settings-header {
+        margin-bottom: 40px;
+      }
+
+      .settings-header h1 {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-main);
+        margin-bottom: 8px;
+      }
+
+      .settings-header p {
+        color: var(--text-light);
+        font-size: 1rem;
+      }
+
+      .settings-tabs {
+        display: flex;
+        gap: 0;
+        border-bottom: 2px solid var(--border);
+        margin-bottom: 40px;
+        overflow-x: auto;
+      }
+
+      .tab-btn {
+        padding: 16px 24px;
+        background: none;
+        border: none;
+        color: var(--text-light);
+        font-weight: 600;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .tab-btn:hover {
+        color: var(--primary);
+      }
+
+      .tab-btn.active {
+        color: var(--primary);
+        border-bottom-color: var(--primary);
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .settings-section {
+        margin-bottom: 40px;
+      }
+
+      .section-header {
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .section-header h2 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 4px;
+      }
+
+      .section-header p {
+        font-size: 0.9rem;
+        color: var(--text-light);
+      }
+
+      .settings-form {
+        display: grid;
+        gap: 20px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .form-row.full {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-group label {
+        font-weight: 600;
+        color: var(--text-main);
+        font-size: 0.9rem;
+      }
+
+      .form-group input,
+      .form-group select {
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        font-size: 0.95rem;
+        background: var(--card-bg);
+        color: var(--text-main);
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        border-color: var(--primary);
+      }
+
+      .form-group input::placeholder {
+        color: var(--text-light);
+      }
+
+      .readonly-input {
+        background: var(--bg);
+        cursor: not-allowed;
+        color: var(--text-light);
+      }
+
+      .settings-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+      }
+
+      .btn-save {
+        background: var(--primary);
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-save:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+
+      .btn-cancel {
+        background: transparent;
+        color: var(--text-main);
+        padding: 12px 24px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-cancel:hover {
+        background: var(--bg);
+      }
+
+      .btn-danger {
+        background: transparent;
+        color: #f56565;
+        padding: 12px 24px;
+        border: 1px solid rgba(245, 101, 101, 0.3);
+        border-radius: var(--radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-danger:hover {
+        background: rgba(245, 101, 101, 0.1);
+        border-color: #f56565;
+      }
+
+      .toggle-switch {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .toggle-input {
+        width: 50px;
+        height: 28px;
+        background: var(--border);
+        border-radius: 14px;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        transition: background 0.3s;
+        appearance: none;
+      }
+
+      .toggle-input:checked {
+        background: var(--primary);
+      }
+
+      .toggle-input::after {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        background: white;
+        border-radius: 50%;
+        top: 2px;
+        left: 2px;
+        transition: left 0.3s;
+      }
+
+      .toggle-input:checked::after {
+        left: 24px;
+      }
+
+      .info-box {
+        background: var(--accent-light);
+        border: 1px solid rgba(47, 120, 199, 0.2);
+        border-radius: var(--radius);
+        padding: 16px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 12px;
+        color: var(--text-main);
+      }
+
+      .info-box ion-icon {
+        flex-shrink: 0;
+        color: var(--primary);
+        font-size: 1.3rem;
+      }
+
+      .danger-box {
+        background: rgba(245, 101, 101, 0.1);
+        border: 1px solid rgba(245, 101, 101, 0.2);
+        border-radius: var(--radius);
+        padding: 20px;
+        margin-top: 30px;
+      }
+
+      .danger-box h3 {
+        color: #f56565;
+        font-size: 1rem;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .danger-box p {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-bottom: 16px;
+      }
+
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        backdrop-filter: blur(2px);
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-overlay.show {
+        display: flex;
+      }
+
+      .modal-content {
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .modal-content h2 {
+        color: var(--text-main);
+        margin-bottom: 12px;
+        font-size: 1.3rem;
+      }
+
+      .modal-content p {
+        color: var(--text-light);
+        margin-bottom: 24px;
+        line-height: 1.5;
+      }
+
+      .modal-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .success-message {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #10b981;
+        padding: 12px 16px;
+        border-radius: var(--radius);
+        display: none;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .success-message.show {
+        display: flex;
+      }
+
+      .dark-mode .form-group input,
+      .dark-mode .form-group select {
+        background: var(--card-bg);
+        color: var(--text-main);
+      }
+
+      .dark-mode .info-box {
+        background: rgba(49, 130, 206, 0.1);
+      }
+
+      .dark-mode .danger-box {
+        background: rgba(245, 101, 101, 0.05);
+      }
+
+      @media (max-width: 768px) {
+        .settings-container {
+          padding: 20px 15px;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .settings-tabs {
+          flex-wrap: nowrap;
+          overflow-x: auto;
+        }
+
+        .settings-header h1 {
+          font-size: 1.5rem;
+        }
+
+        .settings-actions {
+          flex-direction: column;
+        }
+
+        .btn-save,
+        .btn-cancel,
+        .btn-danger {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body class="light-mode">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-icon"><ion-icon name="school"></ion-icon></div>
+          <div class="logo-text">UniCalc</div>
+        </div>
+
+        <nav class="nav-menu">
+          <div class="nav-label">Menu</div>
+          <a href="dashboard.html" class="nav-item">
+            <ion-icon name="grid-outline"></ion-icon>
+            <span>Dashboard</span>
+          </a>
+          <a href="academic-records.html" class="nav-item">
+            <ion-icon name="folder-open-outline"></ion-icon>
+            <span>Academic Records</span>
+          </a>
+          <a href="cgpa-calculator.html" class="nav-item">
+            <ion-icon name="calculator-outline"></ion-icon>
+            <span>CGPA Calculator</span>
+          </a>
+          <a href="transcripts.html" class="nav-item">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>Transcripts</span>
+          </a>
+
+          <div class="nav-label">Preferences</div>
+          <a href="settings.html" class="nav-item active">
+            <ion-icon name="settings-outline"></ion-icon>
+            <span>Settings</span>
+          </a>
+        </nav>
+
+        <div class="user-profile-container" id="profile-trigger">
+          <div class="profile-dropup" id="profile-menu">
+            <a href="account-settings.html" class="dropup-item">
+              <ion-icon name="person-circle-outline"></ion-icon>
+              <span>Account Settings</span>
+            </a>
+            <a href="view-metrics.html" class="dropup-item">
+              <ion-icon name="stats-chart-outline"></ion-icon>
+              <span>View Metrics</span>
+            </a>
+            <div class="dropup-divider"></div>
+            <a
+              href="../auth/login.html"
+              target="_blank"
+              class="dropup-item danger"
+            >
+              <ion-icon name="log-out-outline"></ion-icon>
+              <span>Logout</span>
+            </a>
+          </div>
+
+          <div class="user-mini-profile">
+            <div class="avatar">JK</div>
+            <div class="user-info">
+              <span class="name">John Kuame</span>
+              <span class="role">Student</span>
+            </div>
+            <button
+              class="btn-icon"
+              id="theme-toggle-btn"
+              onclick="toggleTheme(event)"
+            >
+              <ion-icon name="moon-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-bar">
+          <div class="header-left">
+            <button class="menu-toggle" id="menu-open">
+              <ion-icon name="menu-outline"></ion-icon>
+            </button>
+            <h1 class="page-title">Settings</h1>
+          </div>
+        </header>
+
+        <div class="settings-container">
+          <div class="settings-header">
+            <h1>Settings</h1>
+            <p>Manage your account preferences and application settings</p>
+          </div>
+
+          <div class="settings-tabs">
+            <button
+              class="tab-btn active"
+              onclick="switchSettingsTab(event, 'account')"
+            >
+              <ion-icon name="person-outline"></ion-icon>
+              Account
+            </button>
+            <button
+              class="tab-btn"
+              onclick="switchSettingsTab(event, 'academic')"
+            >
+              <ion-icon name="school-outline"></ion-icon>
+              Academic
+            </button>
+            <button class="tab-btn" onclick="switchSettingsTab(event, 'security')">
+              <ion-icon name="lock-closed-outline"></ion-icon>
+              Security
+            </button>
+            <button class="tab-btn" onclick="switchSettingsTab(event, 'data')">
+              <ion-icon name="cloud-download-outline"></ion-icon>
+              Data
+            </button>
+            <button
+              class="tab-btn"
+              onclick="switchSettingsTab(event, 'preferences')"
+            >
+              <ion-icon name="sliders-outline"></ion-icon>
+              Preferences
+            </button>
+          </div>
+
+          <div id="account" class="tab-content active">
+            <div class="success-message" id="accountSuccess">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              <span>Account settings updated successfully</span>
+            </div>
+
+            <div class="settings-section">
+              <div class="section-header">
+                <h2>Personal Information</h2>
+                <p>Update your personal details</p>
+              </div>
+
+              <form class="settings-form" id="accountForm">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" value="John" />
+                  </div>
+                  <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" value="Kuame" />
+                  </div>
+                </div>
+
+                <div class="form-row full">
+                  <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" value="john.k@university.edu" />
+                  </div>
+                </div>
+
+                <div class="form-row full">
+                  <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      placeholder="+234 800 123 4567"
+                    />
+                  </div>
+                </div>
+
+                <div class="settings-actions">
+                  <button
+                    type="button"
+                    class="btn-save"
+                    onclick="saveAccountSettings()"
+                  >
+                    <ion-icon name="checkmark"></ion-icon> Save Changes
+                  </button>
+                  <button type="reset" class="btn-cancel">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div id="academic" class="tab-content">
+            <div class="success-message" id="academicSuccess">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              <span>Academic settings updated successfully</span>
+            </div>
+
+            <div class="settings-section">
+              <div class="section-header">
+                <h2>Academic Details</h2>
+                <p>Your university and program information</p>
+              </div>
+
+              <form class="settings-form" id="academicForm">
+                <div class="form-row full">
+                  <div class="form-group">
+                    <label for="university">University/Institution</label>
+                    <input
+                      type="text"
+                      id="university"
+                      value="Federal University of Technology, Minna"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="program">Program/Degree</label>
+                    <input type="text" id="program" value="Microbiology" />
+                  </div>
+                  <div class="form-group">
+                    <label for="level">Current Level</label>
+                    <select id="level">
+                      <option value="100">100L</option>
+                      <option value="200">200L</option>
+                      <option value="300" selected>300L</option>
+                      <option value="400">400L</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="matricNumber">Matric Number</label>
+                    <input
+                      type="text"
+                      id="matricNumber"
+                      value="2023/1/88776LM"
+                      class="readonly-input"
+                      readonly
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="gpaScale">GPA Scale</label>
+                    <select id="gpaScale">
+                      <option value="5.0" selected>Nigerian (5.0)</option>
+                      <option value="4.0">US (4.0)</option>
+                      <option value="10">European (10)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row full">
+                  <div class="form-group">
+                    <label for="gradDate">Expected Graduation Date</label>
+                    <input type="date" id="gradDate" />
+                  </div>
+                </div>
+
+                <div class="settings-actions">
+                  <button
+                    type="button"
+                    class="btn-save"
+                    onclick="saveAcademicSettings()"
+                  >
+                    <ion-icon name="checkmark"></ion-icon> Save Changes
+                  </button>
+                  <button type="reset" class="btn-cancel">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div id="security" class="tab-content">
+            <div class="success-message" id="securitySuccess">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              <span>Security settings updated successfully</span>
+            </div>
+
+            <div class="settings-section">
+              <div class="section-header">
+                <h2>Change Password</h2>
+                <p>Update your account password</p>
+              </div>
+
+              <div class="info-box">
+                <ion-icon name="information-circle-outline"></ion-icon>
+                <div>Use a strong password with at least 8 characters, including
+                uppercase, lowercase, and numbers.</div>
+              </div>
+
+              <form class="settings-form" id="passwordForm">
+                <div class="form-row full">
+                  <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" />
+                  </div>
+                </div>
+
+                <div class="form-row full">
+                  <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" />
+                  </div>
+                </div>
+
+                <div class="form-row full">
+                  <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" />
+                  </div>
+                </div>
+
+                <div class="settings-actions">
+                  <button
+                    type="button"
+                    class="btn-save"
+                    onclick="changePassword()"
+                  >
+                    <ion-icon name="lock-closed"></ion-icon> Change Password
+                  </button>
+                  <button type="reset" class="btn-cancel">Cancel</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="settings-section">
+              <div class="section-header">
+                <h2>Two-Factor Authentication</h2>
+                <p>Add an extra layer of security to your account</p>
+              </div>
+
+              <div class="toggle-switch">
+                <input type="checkbox" id="2fa-toggle" class="toggle-input" />
+                <label for="2fa-toggle" style="margin: 0; cursor: pointer; color: var(--text-main);">Enable 2FA</label>
+              </div>
+              <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 8px;">
+                You'll need to provide a second verification method when logging in
+              </p>
+            </div>
+          </div>
+
+          <div id="data" class="tab-content">
+            <div class="success-message" id="dataSuccess">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              <span>Data operation completed successfully</span>
+            </div>
+
+            <div class="settings-section">
+              <div class="section-header">
+                <h2>Export Your Data</h2>
+                <p>Download all your academic records and settings</p>
+              </div>
+
+              <div class="form-row full">
+                <button
+                  type="button"
+                  class="btn-save"
+                  style="justify-content: center;"
+                  onclick="exportData('csv')"
+                >
+                  <ion-icon name="document-outline"></ion-icon> Export as CSV
+                </button>
+              </div>
+
+              <div class="form-row full">
+                <button
+                  type="button"
+                  class="btn-save"
+                  style="justify-content: center;"
+                  onclick="exportData('json')"
+                >
+                  <ion-icon name="code-outline"></ion-icon> Export as JSON
+                </button>
+              </div>
+            </div>
+
+            <div class="danger-box">
+              <h3>
+                <ion-icon name="warning-outline"></ion-icon>
+                Danger Zone
+              </h3>
+              <p>Clear all your academic records and settings. This action cannot be undone.</p>
+              <button class="btn-danger" onclick="openClearModal()">
+                <ion-icon name="trash-outline"></ion-icon> Clear All Data
+              </button>
+            </div>
+          </div>
+
+          <div id="preferences" class="tab-content">
+            <div class="success-message" id="preferencesSuccess">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              <span>Preferences updated successfully</span>
+            </div>
+
+            <div class="settings-section">
+              <div class="section-header">
+                <h2>Display Preferences</h2>
+                <p>Customize your app experience</p>
+              </div>
+
+              <form class="settings-form" id="preferencesForm">
+                <div class="form-row full">
+                  <div class="form-group">
+                    <label for="theme">Theme</label>
+                    <select id="theme">
+                      <option value="light">Light Mode</option>
+                      <option value="dark">Dark Mode</option>
+                      <option value="auto">Auto (System)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row full">
+                  <div class="form-group">
+                    <label for="language">Language</label>
+                    <select id="language">
+                      <option value="en" selected>English</option>
+                      <option value="yoruba">Yoruba</option>
+                      <option value="igbo">Igbo</option>
+                      <option value="hausa">Hausa</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row full">
+                  <div class="toggle-switch">
+                    <input
+                      type="checkbox"
+                      id="emailNotif"
+                      class="toggle-input"
+                      checked
+                    />
+                    <label for="emailNotif" style="margin: 0; cursor: pointer; color: var(--text-main);">Email Notifications</label>
+                  </div>
+                </div>
+
+                <div class="form-row full">
+                  <div class="toggle-switch">
+                    <input
+                      type="checkbox"
+                      id="inAppNotif"
+                      class="toggle-input"
+                      checked
+                    />
+                    <label for="inAppNotif" style="margin: 0; cursor: pointer; color: var(--text-main);">In-App Notifications</label>
+                  </div>
+                </div>
+
+                <div class="settings-actions">
+                  <button
+                    type="button"
+                    class="btn-save"
+                    onclick="savePreferences()"
+                  >
+                    <ion-icon name="checkmark"></ion-icon> Save Preferences
+                  </button>
+                  <button type="reset" class="btn-cancel">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="modal-overlay" id="clearModal">
+      <div class="modal-content">
+        <h2>Clear All Data?</h2>
+        <p>
+          This will permanently delete all your academic records, settings, and
+          calculator data. This action cannot be undone.
+        </p>
+        <div class="modal-actions">
+          <button
+            class="btn-save"
+            onclick="confirmClearData()"
+            style="background: #f56565; justify-content: center;"
+          >
+            Clear All
+          </button>
+          <button class="btn-cancel" onclick="closeClearModal()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../assets/js/pages.js"></script>
+    <script>
+      function switchSettingsTab(event, tabName) {
+        event.preventDefault();
+
+        const tabs = document.querySelectorAll(".tab-content");
+        tabs.forEach((tab) => tab.classList.remove("active"));
+
+        const buttons = document.querySelectorAll(".tab-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+
+        document.getElementById(tabName).classList.add("active");
+        event.target.closest(".tab-btn").classList.add("active");
+      }
+
+      async function saveAccountSettings() {
+        const firstName = document.getElementById("firstName").value;
+        const lastName = document.getElementById("lastName").value;
+        const email = document.getElementById("email").value;
+
+        if (!firstName || !lastName || !email) {
+          alert("Please fill in all fields");
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/settings/account", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${getAuthToken()}`,
+            },
+            body: JSON.stringify({ firstName, lastName, email }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to save settings");
+          }
+
+          showSuccess("accountSuccess");
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Error saving settings: " + error.message);
+        }
+      }
+
+      async function saveAcademicSettings() {
+        const university = document.getElementById("university").value;
+        const program = document.getElementById("program").value;
+        const level = document.getElementById("level").value;
+        const gpaScale = document.getElementById("gpaScale").value;
+        const gradDate = document.getElementById("gradDate").value;
+
+        try {
+          const response = await fetch("/api/settings/academic", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${getAuthToken()}`,
+            },
+            body: JSON.stringify({
+              university,
+              program,
+              level,
+              gpaScale,
+              gradDate,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to save settings");
+          }
+
+          showSuccess("academicSuccess");
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Error saving settings: " + error.message);
+        }
+      }
+
+      async function changePassword() {
+        const currentPassword = document.getElementById("currentPassword").value;
+        const newPassword = document.getElementById("newPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (!currentPassword || !newPassword || !confirmPassword) {
+          alert("Please fill in all password fields");
+          return;
+        }
+
+        if (newPassword !== confirmPassword) {
+          alert("New passwords do not match");
+          return;
+        }
+
+        if (newPassword.length < 8) {
+          alert("Password must be at least 8 characters long");
+          return;
+        }
+
+        try {
+          const response = await fetch("/api/settings/password", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${getAuthToken()}`,
+            },
+            body: JSON.stringify({ currentPassword, newPassword }),
+          });
+
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Failed to change password");
+          }
+
+          document.getElementById("passwordForm").reset();
+          showSuccess("securitySuccess");
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Error: " + error.message);
+        }
+      }
+
+      function openClearModal() {
+        document.getElementById("clearModal").classList.add("show");
+      }
+
+      function closeClearModal() {
+        document.getElementById("clearModal").classList.remove("show");
+      }
+
+      async function confirmClearData() {
+        try {
+          const response = await fetch("/api/settings/data/clear", {
+            method: "DELETE",
+            headers: {
+              "Authorization": `Bearer ${getAuthToken()}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to clear data");
+          }
+
+          closeClearModal();
+          showSuccess("dataSuccess");
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 1500);
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Error: " + error.message);
+        }
+      }
+
+      async function exportData(format) {
+        try {
+          const response = await fetch(`/api/settings/data/export?format=${format}`, {
+            headers: {
+              "Authorization": `Bearer ${getAuthToken()}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to export data");
+          }
+
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `unicalc-data-${new Date().toISOString().split("T")[0]}.${format}`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+          showSuccess("dataSuccess");
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Error exporting data: " + error.message);
+        }
+      }
+
+      async function savePreferences() {
+        const theme = document.getElementById("theme").value;
+        const language = document.getElementById("language").value;
+        const emailNotif = document.getElementById("emailNotif").checked;
+        const inAppNotif = document.getElementById("inAppNotif").checked;
+
+        try {
+          const response = await fetch("/api/settings/preferences", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${getAuthToken()}`,
+            },
+            body: JSON.stringify({ theme, language, emailNotif, inAppNotif }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to save preferences");
+          }
+
+          if (theme === "dark") {
+            document.body.classList.add("dark-mode");
+          } else if (theme === "light") {
+            document.body.classList.remove("dark-mode");
+          }
+
+          showSuccess("preferencesSuccess");
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Error saving preferences: " + error.message);
+        }
+      }
+
+      function showSuccess(elementId) {
+        const element = document.getElementById(elementId);
+        element.classList.add("show");
+        setTimeout(() => {
+          element.classList.remove("show");
+        }, 3000);
+      }
+
+      function getAuthToken() {
+        return localStorage.getItem("authToken") || "";
+      }
+
+      window.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const response = await fetch("/api/settings", {
+            headers: {
+              "Authorization": `Bearer ${getAuthToken()}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to load settings");
+          }
+
+          const settings = await response.json();
+
+          if (settings.account) {
+            document.getElementById("firstName").value = settings.account.firstName || "";
+            document.getElementById("lastName").value = settings.account.lastName || "";
+            document.getElementById("email").value = settings.account.email || "";
+          }
+
+          if (settings.academic) {
+            document.getElementById("university").value =
+              settings.academic.university || "";
+            document.getElementById("program").value =
+              settings.academic.program || "";
+            document.getElementById("level").value = settings.academic.level || "300";
+            document.getElementById("gpaScale").value =
+              settings.academic.gpaScale || "5.0";
+            document.getElementById("gradDate").value =
+              settings.academic.gradDate || "";
+          }
+
+          if (settings.preferences) {
+            document.getElementById("theme").value =
+              settings.preferences.theme || "light";
+            document.getElementById("language").value =
+              settings.preferences.language || "en";
+            document.getElementById("emailNotif").checked =
+              settings.preferences.emailNotif !== false;
+            document.getElementById("inAppNotif").checked =
+              settings.preferences.inAppNotif !== false;
+          }
+        } catch (error) {
+          console.error("Error loading settings:", error);
+        }
+      });
+    </script>
+  </body>
+</html>

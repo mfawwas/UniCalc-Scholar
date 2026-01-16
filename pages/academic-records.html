@@ -13,6 +13,75 @@
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
     <link rel="stylesheet" href="../assets/css/pages.css" />
+
+    <style>
+      .session-control {
+        margin: 20px 0 30px 0;
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      .semester-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+
+      .gpa-badge {
+        padding: 6px 12px;
+        background: var(--accent-light);
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .no-record-row {
+        text-align: center;
+        padding: 40px !important;
+        color: var(--text-light);
+        font-style: italic;
+        background: rgba(0, 0, 0, 0.02);
+      }
+
+      .dark-mode .no-record-row {
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 100%;
+      }
+
+      .responsive-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+
+      @media (max-width: 1024px) {
+        .semester-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 800px) {
+        .semester-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
   <body class="light-mode">
     <div class="app-shell">
@@ -32,11 +101,11 @@
             <ion-icon name="folder-open-outline"></ion-icon>
             <span>Academic Records</span>
           </a>
-          <a href="#" class="nav-item">
+          <a href="cgpa-calculator.html" class="nav-item">
             <ion-icon name="calculator-outline"></ion-icon>
             <span>CGPA Calculator</span>
           </a>
-          <a href="#" class="nav-item">
+          <a href="transcripts.html" class="nav-item">
             <ion-icon name="document-text-outline"></ion-icon>
             <span>Transcripts</span>
           </a>
@@ -54,7 +123,7 @@
               <ion-icon name="settings-outline"></ion-icon>
               <span>Account Settings</span>
             </a>
-            <a href="#" class="dropup-item">
+            <a href="view-metrics.html" class="dropup-item">
               <ion-icon name="stats-chart-outline"></ion-icon>
               <span>View Metrics</span>
             </a>
@@ -135,8 +204,70 @@
             </div>
           </div>
         </section>
+
+        <section class="session-control">
+          <div class="selector-wrapper">
+            <label for="level-select">Select Academic Year:</label>
+            <select
+              id="level-select"
+              class="graph-select"
+              onchange="switchSession(this.value)"
+            >
+              <option value="100L">100 Level</option>
+              <option value="200L">200 Level</option>
+              <option value="300L" selected>300 Level</option>
+              <option value="400L">400 Level</option>
+            </select>
+          </div>
+        </section>
+
+        <div class="semester-grid">
+          <div class="card table-card">
+            <div class="card-header">
+              <h3>1st Semester</h3>
+              <span class="gpa-badge" id="sem1-gpa">GPA: 0.00</span>
+            </div>
+            <div class="responsive-table">
+              <table id="table-sem1">
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th>Course Code</th>
+                    <th>Unit</th>
+                    <th>Grade</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <div class="card-header">
+              <h3>2nd Semester</h3>
+              <span class="gpa-badge" id="sem2-gpa">GPA: 0.00</span>
+            </div>
+            <div class="responsive-table">
+              <table id="table-sem2">
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th>Course Code</th>
+                    <th>Unit</th>
+                    <th>Grade</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <script src="../assets/js/pages.js"></script>
     <script src="../assets/js/modules/records.js"></script>

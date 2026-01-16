@@ -1,4 +1,3 @@
-// Function
 window.addEventListener("scroll", () => {
   const nav = document.querySelector(".navbar");
   if (window.scrollY > 20) {
@@ -31,7 +30,6 @@ function revealOnScroll() {
 window.addEventListener("scroll", revealOnScroll);
 revealOnScroll();
 
-// Loading Screen Logic
 function startLoading(callback) {
   const loader = document.getElementById("loader-wrapper");
   const bar = document.getElementById("progress-bar");
