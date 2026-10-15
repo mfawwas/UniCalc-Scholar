@@ -1,124 +1,140 @@
-const initRing = (id, percent, color) => {
-  const ctx = document.getElementById(id).getContext("2d");
-  new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      datasets: [
-        {
-          data: [percent, 100 - percent],
-          backgroundColor: [color, "rgba(0,0,0,0.1)"],
-          borderWidth: 0,
-          borderRadius: 5,
-        },
-      ],
-    },
-    options: {
-      cutout: "80%",
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { enabled: false } },
-    },
-  });
-};
+/**
+ * Academic Records page: progress rings and per-year course tables,
+ * all derived from what the user saved in the calculator.
+ * Loaded as an ES module: <script type="module" src="../assets/js/modules/records.js">
+ */
 
-window.addEventListener("DOMContentLoaded", () => {
-  const isDark = document.body.classList.contains("dark-mode");
+import {
+  SCALES,
+  cumulative,
+  gradePoint,
+  gradeRemark,
+  hasInput,
+  formatGpa,
+  latestYearWithResults,
+} from "../core/calc.js";
+import * as store from "../core/storage.js";
+import { esc } from "../core/html.js";
 
-  const colors = {
-    orange: isDark ? "#ff8c42" : "#ffffff",
-    blue: isDark ? "#48c6ef" : "#ffffff",
-    green: isDark ? "#00b09b" : "#ffffff",
-  };
+const $ = (id) => document.getElementById(id);
 
-  initRing("gradProgressChart", 75, colors.orange);
-  initRing("coreProgressChart", 90, colors.blue);
-  initRing("electiveProgressChart", 40, colors.green);
-});
+const state = store.load() || store.newState();
+const result = cumulative(state.years, state.scale);
+const max = SCALES[state.scale].max;
 
-const academicHistory = {
-  "300L": {
-    sem1: [
-      { code: "MCB 301", unit: 3, grade: "A" },
-      { code: "MCB 303", unit: 3, grade: "B" },
-    ],
-    sem2: [{ code: "MCB 302", unit: 3, grade: "A" }],
-  },
-  "200L": {
-    sem1: [{ code: "MCB 201", unit: 3, grade: "A" }],
-    sem2: [], // Test: No records found
-  },
-};
+/* ---------- progress rings ---------- */
 
-const getGradeStatus = (grade) => {
-  const statuses = {
-    A: "Excellent",
-    B: "Very Good",
-    C: "Good",
-    D: "Pass",
-    E: "Fair",
-    F: "Fail",
-  };
-  return statuses[grade] || "Unknown";
-};
+function setRing(prefix, percent, label) {
+  $(`${prefix}-ring`).style.setProperty("--p", percent);
+  $(`${prefix}-pct`).textContent = label;
+}
 
-const renderSemesterTable = (tableId, data) => {
+function renderRings() {
+  // 1. Degree progress: units earned (passed) vs the total the user says they need.
+  const earned = result.totalEarned;
+  const degree = state.degreeUnits;
+  if (degree) {
+    const pct = Math.min(100, Math.round((earned / degree) * 100));
+    setRing("degree", pct, `${pct}%`);
+    $("degree-value").textContent = `${earned} / ${degree}`;
+    $("degree-sub").textContent =
+      earned >= degree ? "Degree units complete" : `${degree - earned} units to go`;
+  } else {
+    setRing("degree", 0, "—");
+    $("degree-value").textContent = String(earned);
+    $("degree-sub").textContent = "Set your degree total below";
+  }
+
+  // 2. Courses passed vs graded courses.
+  const courses = result.totalCourses;
+  if (courses > 0) {
+    const pct = Math.round((result.totalPassed / courses) * 100);
+    const failed = courses - result.totalPassed;
+    setRing("passed", pct, `${pct}%`);
+    $("passed-value").textContent = `${result.totalPassed} / ${courses}`;
+    $("passed-sub").textContent = failed ? `${failed} failed` : "No failed courses";
+  } else {
+    setRing("passed", 0, "—");
+    $("passed-value").textContent = "0 / 0";
+    $("passed-sub").textContent = "No graded courses yet";
+  }
+
+  // 3. CGPA against the top of the grading scale.
+  if (result.cgpa !== null) {
+    const pct = Math.round((result.cgpa / max) * 100);
+    setRing("cgpa", pct, `${pct}%`);
+    $("cgpa-value").textContent = `${result.cgpa.toFixed(2)} / ${max.toFixed(2)}`;
+    $("cgpa-sub").textContent = result.classification;
+  } else {
+    setRing("cgpa", 0, "—");
+    $("cgpa-value").textContent = "—";
+    $("cgpa-sub").textContent = "No results yet";
+  }
+}
+
+/* ---------- course tables ---------- */
+
+function statusFor(course) {
+  const remark = gradePoint(course.grade, state.scale) !== null && Number(course.unit) > 0
+    ? gradeRemark(course.grade, state.scale)
+    : "";
+  return remark || "Incomplete";
+}
+
+function renderSemesterTable(tableId, courses) {
   const tbody = document.querySelector(`#${tableId} tbody`);
-  if (!tbody) return;
+  const entered = courses.filter(hasInput);
 
-  tbody.innerHTML = "";
-
-  if (!data || data.length === 0) {
+  if (!entered.length) {
     tbody.innerHTML = `<tr><td colspan="5" class="no-record-row">No academic records found for this semester.</td></tr>`;
     return;
   }
 
-  data.forEach((item, index) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-            <td data-label="S/N">${index + 1}</td>
-            <td data-label="Code"><strong>${item.code}</strong></td>
-            <td data-label="Unit">${item.unit}</td>
-            <td data-label="Grade">${item.grade}</td>
-            <td data-label="Status">${getGradeStatus(item.grade)}</td>
-        `;
-    tbody.appendChild(row);
-  });
-};
+  tbody.innerHTML = entered
+    .map(
+      (c, i) => `
+      <tr>
+        <td data-label="S/N">${i + 1}</td>
+        <td data-label="Code"><strong>${esc(c.code.trim() || "—")}</strong></td>
+        <td data-label="Unit">${c.unit || "-"}</td>
+        <td data-label="Grade">${esc(c.grade || "-")}</td>
+        <td data-label="Status">${statusFor(c)}</td>
+      </tr>`
+    )
+    .join("");
+}
 
-window.switchSession = (level) => {
-  const data = academicHistory[level] || { sem1: [], sem2: [] };
-  renderSemesterTable("table-sem1", data.sem1);
-  renderSemesterTable("table-sem2", data.sem2);
-};
+function showYear(index) {
+  const year = state.years[index];
+  const stats = result.breakdown[index];
+  renderSemesterTable("table-sem1", year.sem1);
+  renderSemesterTable("table-sem2", year.sem2);
+  $("sem1-gpa").textContent = `GPA: ${formatGpa(stats.sem1.gpa)}`;
+  $("sem2-gpa").textContent = `GPA: ${formatGpa(stats.sem2.gpa)}`;
+}
 
-document.addEventListener("DOMContentLoaded", () => {
-  switchSession("300L");
-  const chartCanvas = document.getElementById("unicalcHeroChart");
-  if (chartCanvas) {
-    initHeroChart(chartCanvas);
-  }
+/* ---------- init ---------- */
+
+const select = $("level-select");
+select.innerHTML = state.years
+  .map((_, i) => `<option value="${i}">${(i + 1) * 100} Level</option>`)
+  .join("");
+select.value = String((latestYearWithResults(result.breakdown) || 1) - 1);
+select.addEventListener("change", () => showYear(Number(select.value)));
+
+const degreeInput = $("degree-units");
+degreeInput.value = state.degreeUnits ?? "";
+degreeInput.addEventListener("input", () => {
+  const n = Math.round(Number(degreeInput.value));
+  state.degreeUnits =
+    degreeInput.value.trim() !== "" && n >= 1 && n <= store.LIMITS.degreeUnits ? n : null;
+
+  // Re-read before saving so edits made in another tab (e.g. the calculator) aren't overwritten.
+  const latest = store.load() || state;
+  latest.degreeUnits = state.degreeUnits;
+  store.save(latest);
+  renderRings();
 });
 
-function initHeroChart(canvas) {
-  new Chart(canvas, {
-    type: "line",
-    data: {
-      labels: ["100L", "200L", "300L"],
-      datasets: [
-        {
-          label: "CGPA",
-          data: [4.1, 4.35, 4.52],
-          borderColor: "#4f46e5",
-          tension: 0.4,
-          fill: true,
-          backgroundColor: "rgba(79, 70, 229, 0.1)",
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: { y: { max: 5.0 } },
-    },
-  });
-}
+renderRings();
+showYear(Number(select.value));

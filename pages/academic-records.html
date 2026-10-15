@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard | UniCalc Scholar</title>
+    <title>Academic Records | UniCalc Scholar</title>
     <script
       type="module"
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
@@ -18,13 +18,45 @@
       .session-control {
         margin: 20px 0 30px 0;
         display: flex;
-        justify-content: flex-start;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 24px;
+      }
+
+      .selector-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .selector-wrapper label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-light);
+      }
+
+      #degree-units {
+        width: 160px;
       }
 
       .semester-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 30px;
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .card-header h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
       }
 
       .gpa-badge {
@@ -46,6 +78,43 @@
 
       .dark-mode .no-record-row {
         background: rgba(255, 255, 255, 0.02);
+      }
+
+      /* Progress rings: pure CSS, driven by the --p custom property (0-100). */
+      .ring {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(
+          var(--ring-fill, #ffffff) calc(var(--p, 0) * 1%),
+          var(--ring-track, rgba(0, 0, 0, 0.12)) 0
+        );
+        -webkit-mask: radial-gradient(
+          farthest-side,
+          transparent calc(100% - 10px),
+          #000 calc(100% - 9px)
+        );
+        mask: radial-gradient(
+          farthest-side,
+          transparent calc(100% - 10px),
+          #000 calc(100% - 9px)
+        );
+      }
+
+      .dark-mode .ring {
+        --ring-track: rgba(255, 255, 255, 0.1);
+      }
+
+      .dark-mode .accent-orange .ring {
+        --ring-fill: #ff8c42;
+      }
+
+      .dark-mode .accent-blue .ring {
+        --ring-fill: #48c6ef;
+      }
+
+      .dark-mode .accent-green .ring {
+        --ring-fill: #00b09b;
       }
 
       table {
@@ -71,12 +140,6 @@
       }
 
       @media (max-width: 1024px) {
-        .semester-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      @media (max-width: 800px) {
         .semester-grid {
           grid-template-columns: 1fr;
         }
@@ -145,9 +208,11 @@
               <span class="role">Student</span>
             </div>
             <button
+              type="button"
               class="btn-icon"
               id="theme-toggle-btn"
               onclick="toggleTheme(event)"
+              aria-label="Toggle dark mode"
             >
               <ion-icon name="moon-outline"></ion-icon>
             </button>
@@ -158,7 +223,7 @@
       <main class="main-content">
         <header class="top-bar">
           <div class="header-left">
-            <button class="menu-toggle" id="menu-open">
+            <button type="button" class="menu-toggle" id="menu-open" aria-label="Open menu">
               <ion-icon name="menu-outline"></ion-icon>
             </button>
             <h1 class="page-title">Academic Records</h1>
@@ -169,37 +234,37 @@
           <div class="progress-grid">
             <div class="card q-card accent-orange">
               <div class="chart-container">
-                <canvas id="gradProgressChart"></canvas>
-                <div class="percent-circle">75%</div>
+                <div class="ring" id="degree-ring"></div>
+                <div class="percent-circle" id="degree-pct">—</div>
               </div>
               <div class="q-card-body">
                 <span class="q-label">Degree Progress</span>
-                <div class="q-value">102 / 140</div>
-                <span class="q-sub">Units Completed</span>
+                <div class="q-value" id="degree-value">0</div>
+                <span class="q-sub" id="degree-sub">Units earned</span>
               </div>
             </div>
 
             <div class="card q-card accent-blue">
               <div class="chart-container">
-                <canvas id="coreProgressChart"></canvas>
-                <div class="percent-circle">90%</div>
+                <div class="ring" id="passed-ring"></div>
+                <div class="percent-circle" id="passed-pct">—</div>
               </div>
               <div class="q-card-body">
-                <span class="q-label">Core Courses</span>
-                <div class="q-value">18 / 20</div>
-                <span class="q-sub">2 courses left</span>
+                <span class="q-label">Courses Passed</span>
+                <div class="q-value" id="passed-value">0 / 0</div>
+                <span class="q-sub" id="passed-sub">&nbsp;</span>
               </div>
             </div>
 
             <div class="card q-card accent-green">
               <div class="chart-container">
-                <canvas id="electiveProgressChart"></canvas>
-                <div class="percent-circle">40%</div>
+                <div class="ring" id="cgpa-ring"></div>
+                <div class="percent-circle" id="cgpa-pct">—</div>
               </div>
               <div class="q-card-body">
-                <span class="q-label">Electives</span>
-                <div class="q-value">4 / 10</div>
-                <span class="q-sub">6 Units Left</span>
+                <span class="q-label">Cumulative GPA</span>
+                <div class="q-value" id="cgpa-value">—</div>
+                <span class="q-sub" id="cgpa-sub">&nbsp;</span>
               </div>
             </div>
           </div>
@@ -207,17 +272,21 @@
 
         <section class="session-control">
           <div class="selector-wrapper">
-            <label for="level-select">Select Academic Year:</label>
-            <select
-              id="level-select"
+            <label for="level-select">Select Academic Year</label>
+            <select id="level-select" class="graph-select"></select>
+          </div>
+          <div class="selector-wrapper">
+            <label for="degree-units">Total units to graduate</label>
+            <input
+              type="number"
+              id="degree-units"
               class="graph-select"
-              onchange="switchSession(this.value)"
-            >
-              <option value="100L">100 Level</option>
-              <option value="200L">200 Level</option>
-              <option value="300L" selected>300 Level</option>
-              <option value="400L">400 Level</option>
-            </select>
+              min="1"
+              max="400"
+              step="1"
+              inputmode="numeric"
+              placeholder="e.g. 140"
+            />
           </div>
         </section>
 
@@ -225,7 +294,7 @@
           <div class="card table-card">
             <div class="card-header">
               <h3>1st Semester</h3>
-              <span class="gpa-badge" id="sem1-gpa">GPA: 0.00</span>
+              <span class="gpa-badge" id="sem1-gpa">GPA: —</span>
             </div>
             <div class="responsive-table">
               <table id="table-sem1">
@@ -246,7 +315,7 @@
           <div class="card table-card">
             <div class="card-header">
               <h3>2nd Semester</h3>
-              <span class="gpa-badge" id="sem2-gpa">GPA: 0.00</span>
+              <span class="gpa-badge" id="sem2-gpa">GPA: —</span>
             </div>
             <div class="responsive-table">
               <table id="table-sem2">
@@ -270,6 +339,6 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <script src="../assets/js/pages.js"></script>
-    <script src="../assets/js/modules/records.js"></script>
+    <script type="module" src="../assets/js/modules/records.js"></script>
   </body>
 </html>

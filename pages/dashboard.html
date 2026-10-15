@@ -13,6 +13,94 @@
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
     <link rel="stylesheet" href="../assets/css/pages.css" />
+
+    <style>
+      .btn-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border-radius: var(--radius);
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s;
+      }
+
+      .link-muted,
+      .empty-state a,
+      .empty-cell a {
+        color: var(--accent);
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .link-muted:hover,
+      .empty-state a:hover,
+      .empty-cell a:hover {
+        text-decoration: underline;
+      }
+
+      .header-info h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+
+      .header-info p {
+        color: var(--text-light);
+        font-size: 0.85rem;
+        margin-top: 4px;
+      }
+
+      #progress-chart {
+        height: 100%;
+        width: 100%;
+      }
+
+      #progress-chart svg {
+        display: block;
+      }
+
+      .empty-state {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
+        color: var(--text-light);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .empty-cell {
+        grid-column: 1 / -1;
+        color: var(--text-light);
+        font-size: 0.95rem;
+      }
+
+      .content-section {
+        margin-top: 10px;
+      }
+
+      .activity-table {
+        padding: 0;
+      }
+
+      .activity-table .col {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      @media (max-width: 600px) {
+        .table-row {
+          padding: 14px 16px;
+          font-size: 0.85rem;
+        }
+      }
+    </style>
   </head>
   <body class="light-mode">
     <div class="app-shell">
@@ -76,9 +164,11 @@
               <span class="role">Student</span>
             </div>
             <button
+              type="button"
               class="btn-icon"
               id="theme-toggle-btn"
               onclick="toggleTheme(event)"
+              aria-label="Toggle dark mode"
             >
               <ion-icon name="moon-outline"></ion-icon>
             </button>
@@ -89,15 +179,15 @@
       <main class="main-content">
         <header class="top-bar">
           <div class="header-left">
-            <button class="menu-toggle" id="menu-open">
+            <button type="button" class="menu-toggle" id="menu-open" aria-label="Open menu">
               <ion-icon name="menu-outline"></ion-icon>
             </button>
             <h1 class="page-title">Dashboard</h1>
           </div>
           <div class="actions">
-            <button class="btn-secondary desktop-only">
-              <ion-icon name="cloud-upload-outline"></ion-icon> Sync Data
-            </button>
+            <a href="cgpa-calculator.html" class="btn-link btn-primary">
+              <ion-icon name="calculator-outline"></ion-icon> Open Calculator
+            </a>
           </div>
         </header>
 
@@ -106,8 +196,8 @@
             <div class="card q-card grad-orange accent-orange">
               <div class="q-card-body">
                 <span class="q-label">Current CGPA</span>
-                <div class="q-value">4.52</div>
-                <span class="q-sub">Top 5% of Class</span>
+                <div class="q-value" id="stat-cgpa">0.00</div>
+                <span class="q-sub" id="stat-cgpa-sub">&nbsp;</span>
               </div>
               <ion-icon name="trending-up" class="q-icon"></ion-icon>
             </div>
@@ -115,8 +205,8 @@
             <div class="card q-card grad-blue accent-blue">
               <div class="q-card-body">
                 <span class="q-label">Total Units</span>
-                <div class="q-value">102</div>
-                <span class="q-sub">12 units this sem</span>
+                <div class="q-value" id="stat-units">0</div>
+                <span class="q-sub" id="stat-units-sub">&nbsp;</span>
               </div>
               <ion-icon name="layers" class="q-icon"></ion-icon>
             </div>
@@ -124,17 +214,17 @@
             <div class="card q-card grad-lightblue accent-lightblue">
               <div class="q-card-body">
                 <span class="q-label">Academic Level</span>
-                <div class="q-value">300L</div>
-                <span class="q-sub">Microbiology</span>
+                <div class="q-value" id="stat-level">—</div>
+                <span class="q-sub" id="stat-level-sub">&nbsp;</span>
               </div>
               <ion-icon name="school" class="q-icon"></ion-icon>
             </div>
 
             <div class="card q-card grad-green accent-green">
               <div class="q-card-body">
-                <span class="q-label">Status</span>
-                <div class="q-value">Active</div>
-                <span class="q-sub">Records Synced</span>
+                <span class="q-label">Your Data</span>
+                <div class="q-value" id="stat-saved">Empty</div>
+                <span class="q-sub" id="stat-saved-sub">&nbsp;</span>
               </div>
               <ion-icon name="checkmark-circle" class="q-icon"></ion-icon>
             </div>
@@ -144,53 +234,35 @@
             <div class="graph-header">
               <div class="header-info">
                 <h3>CGPA Progression</h3>
-                <p>Growth over 5 semesters</p>
+                <p id="chart-sub">CGPA after each semester</p>
               </div>
               <div class="graph-actions">
-                <select class="graph-select">
-                  <option>Last 5 Semesters</option>
-                  <option>Full Career</option>
+                <label for="chart-range" class="sr-only" style="position:absolute;left:-9999px">Chart range</label>
+                <select class="graph-select" id="chart-range">
+                  <option value="recent">Last 5 Semesters</option>
+                  <option value="all">Full Career</option>
                 </select>
               </div>
             </div>
             <div class="chart-wrapper">
-              <canvas id="unicalcHeroChart"></canvas>
+              <div id="progress-chart"></div>
             </div>
           </div>
         </section>
 
         <section class="content-section">
           <div class="section-header">
-            <h2>Recent Activity</h2>
-            <a href="#" class="link-muted">View all</a>
+            <h2>Semester Results</h2>
+            <a href="academic-records.html" class="link-muted">View all</a>
           </div>
 
           <div class="card activity-table">
             <div class="table-row header">
-              <div class="col">Activity</div>
-              <div class="col">Date</div>
-              <div class="col">Status</div>
+              <div class="col">Semester</div>
+              <div class="col">Units</div>
+              <div class="col">GPA / CGPA</div>
             </div>
-            <div class="table-row">
-              <div class="col">
-                <ion-icon name="document-text-outline"></ion-icon> Generated
-                Transcript
-              </div>
-              <div class="col">Oct 24, 2025</div>
-              <div class="col">
-                <span class="status-pill success">Completed</span>
-              </div>
-            </div>
-            <div class="table-row">
-              <div class="col">
-                <ion-icon name="calculator-outline"></ion-icon> Updated Year 2
-                Sem 1
-              </div>
-              <div class="col">Oct 22, 2025</div>
-              <div class="col">
-                <span class="status-pill warning">Draft</span>
-              </div>
-            </div>
+            <div id="semester-rows"></div>
           </div>
         </section>
       </main>
@@ -199,13 +271,6 @@
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <script src="../assets/js/pages.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        window.location.href = "/auth/login";
-      }
-    </script>
+    <script type="module" src="../assets/js/dashboard.js"></script>
   </body>
 </html>
