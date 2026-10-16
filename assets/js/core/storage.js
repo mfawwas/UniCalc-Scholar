@@ -11,6 +11,7 @@
  *   matricNo: "",
  *   years: [{ sem1: [{ code, unit, grade }], sem2: [...] }],
  *   plan: { target: number | null, remaining: number | null },
+ *   degreeUnits: number | null,   // total credit units needed to graduate
  *   updatedAt: ISO string | null
  * }
  */
@@ -27,6 +28,7 @@ export const LIMITS = {
   name: 80,
   matric: 30,
   planUnits: 400,
+  degreeUnits: 400,
 };
 
 export function blankCourse() {
@@ -48,6 +50,7 @@ export function newState(scale = DEFAULT_SCALE) {
     matricNo: "",
     years: [blankYear()],
     plan: { target: null, remaining: null },
+    degreeUnits: null,
     updatedAt: null,
   };
 }
@@ -80,6 +83,11 @@ function cleanPlan(plan) {
   };
 }
 
+function cleanDegreeUnits(value) {
+  const n = Math.round(Number(value));
+  return value != null && n >= 1 && n <= LIMITS.degreeUnits ? n : null;
+}
+
 /** Returns a clean state object, or null if `raw` isn't recognisable. */
 export function sanitizeState(raw) {
   if (!raw || typeof raw !== "object" || !Array.isArray(raw.years)) {
@@ -98,6 +106,7 @@ export function sanitizeState(raw) {
     matricNo: text(raw.matricNo, LIMITS.matric),
     years: years.length ? years : [blankYear()],
     plan: cleanPlan(raw.plan),
+    degreeUnits: cleanDegreeUnits(raw.degreeUnits),
     updatedAt: typeof raw.updatedAt === "string" ? raw.updatedAt : null,
   };
 }

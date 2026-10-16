@@ -15,6 +15,7 @@ export const SCALES = {
     label: "5.0 scale",
     max: 5,
     points: { A: 5, B: 4, C: 3, D: 2, E: 1, F: 0 },
+    remarks: { A: "Excellent", B: "Very Good", C: "Good", D: "Fair", E: "Pass", F: "Fail" },
     classes: [
       { min: 4.5, name: "First Class" },
       { min: 3.5, name: "Second Class Upper" },
@@ -27,6 +28,7 @@ export const SCALES = {
     label: "4.0 scale",
     max: 4,
     points: { A: 4, B: 3, C: 2, D: 1, F: 0 },
+    remarks: { A: "Excellent", B: "Very Good", C: "Good", D: "Pass", F: "Fail" },
     classes: [
       { min: 3.5, name: "First Class" },
       { min: 3.0, name: "Second Class Upper" },
@@ -55,6 +57,12 @@ export function gradePoint(grade, scale) {
     : null;
 }
 
+/** Plain-English remark for a grade ("Very Good"), or "" if invalid on this scale. */
+export function gradeRemark(grade, scale) {
+  const remarks = SCALES[normalizeScale(scale)].remarks;
+  return Object.prototype.hasOwnProperty.call(remarks, grade) ? remarks[grade] : "";
+}
+
 export function round2(n) {
   return Math.round((n + Number.EPSILON) * 100) / 100;
 }
@@ -76,6 +84,8 @@ export function hasInput(course) {
 
 /**
  * Stats for one semester.
+ * `units` = credit units attempted (graded courses, failures included).
+ * `earned` = units actually passed (grade point > 0); `passed` = courses passed.
  * A course only counts when it has a unit > 0 AND a grade valid on this scale.
  * Rows with some input but not both are reported as `incomplete`.
  * `gpa` is null (not 0) when nothing is countable yet.
@@ -85,6 +95,8 @@ export function semesterStats(courses = [], scale = DEFAULT_SCALE) {
   let points = 0;
   let counted = 0;
   let incomplete = 0;
+  let earned = 0;
+  let passed = 0;
 
   for (const course of courses) {
     const unit = toUnit(course?.unit);
@@ -93,6 +105,10 @@ export function semesterStats(courses = [], scale = DEFAULT_SCALE) {
       units += unit;
       points += unit * gp;
       counted++;
+      if (gp > 0) {
+        earned += unit;
+        passed++;
+      }
     } else if (hasInput(course)) {
       incomplete++;
     }
@@ -103,6 +119,8 @@ export function semesterStats(courses = [], scale = DEFAULT_SCALE) {
     points,
     counted,
     incomplete,
+    earned,
+    passed,
     gpa: units > 0 ? round2(points / units) : null,
   };
 }
@@ -126,6 +144,9 @@ export function classify(cgpa, scale = DEFAULT_SCALE) {
 export function cumulative(years = [], scale = DEFAULT_SCALE) {
   let totalUnits = 0;
   let totalPoints = 0;
+  let totalEarned = 0;
+  let totalCourses = 0;
+  let totalPassed = 0;
   let incomplete = 0;
 
   const breakdown = years.map((year, i) => {
@@ -133,6 +154,9 @@ export function cumulative(years = [], scale = DEFAULT_SCALE) {
     const sem2 = semesterStats(year?.sem2, scale);
     totalUnits += sem1.units + sem2.units;
     totalPoints += sem1.points + sem2.points;
+    totalEarned += sem1.earned + sem2.earned;
+    totalCourses += sem1.counted + sem2.counted;
+    totalPassed += sem1.passed + sem2.passed;
     incomplete += sem1.incomplete + sem2.incomplete;
     return { year: i + 1, sem1, sem2 };
   });
@@ -143,10 +167,51 @@ export function cumulative(years = [], scale = DEFAULT_SCALE) {
     breakdown,
     totalUnits,
     totalPoints,
+    totalEarned,
+    totalCourses,
+    totalPassed,
     incomplete,
     cgpa,
     classification: classify(cgpa, scale),
   };
+}
+
+/**
+ * One entry per semester that has results, in order, with the running CGPA after it.
+ * [{ year, sem, label: "Y2 S1", units, earned, gpa, cgpa }]
+ */
+export function semesterSeries(years = [], scale = DEFAULT_SCALE) {
+  let units = 0;
+  let points = 0;
+  const series = [];
+
+  years.forEach((year, yi) => {
+    ["sem1", "sem2"].forEach((key, si) => {
+      const stats = semesterStats(year?.[key], scale);
+      if (stats.units === 0) return;
+      units += stats.units;
+      points += stats.points;
+      series.push({
+        year: yi + 1,
+        sem: si + 1,
+        label: `Y${yi + 1} S${si + 1}`,
+        units: stats.units,
+        earned: stats.earned,
+        gpa: stats.gpa,
+        cgpa: round2(points / units),
+      });
+    });
+  });
+
+  return series;
+}
+
+/** 1-based number of the latest academic year that has results, or null. */
+export function latestYearWithResults(breakdown = []) {
+  for (let i = breakdown.length - 1; i >= 0; i--) {
+    if (breakdown[i].sem1.units + breakdown[i].sem2.units > 0) return breakdown[i].year;
+  }
+  return null;
 }
 
 /** "4.25", or an em dash when there is no value yet. */
