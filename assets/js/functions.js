@@ -16,6 +16,9 @@ import {
   planTarget,
 } from "./core/calc.js";
 import * as store from "./core/storage.js";
+import { esc } from "./core/html.js";
+import { buildTranscript } from "./core/transcript.js";
+import { downloadTranscriptPdf } from "./core/transcript-pdf.js";
 
 const { LIMITS, blankCourse, blankYear } = store;
 
@@ -44,9 +47,6 @@ let saveTimer = null;
 let toastTimer = null;
 
 /* ---------- helpers ---------- */
-
-const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
-const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ESC[c]);
 
 function toast(message) {
   let el = $("toast");
@@ -503,87 +503,13 @@ async function importBackup() {
 /* ---------- PDF transcript ---------- */
 
 function exportPDF() {
-  const jsPDF = window.jspdf?.jsPDF;
-  const doc = jsPDF ? new jsPDF() : null;
-  if (!doc || typeof doc.autoTable !== "function") {
-    return toast("The PDF tool didn't load. Check your connection and try again.");
+  const model = buildTranscript(state);
+  if (!model.hasData) {
+    return toast("Add at least one course before downloading a transcript.");
   }
-
-  const result = cumulative(state.years, state.scale);
-  const name = state.studentName.trim() || "NAME NOT PROVIDED";
-  const matric = state.matricNo.trim() || "MATRIC NOT PROVIDED";
-
-  doc.setFont(undefined, "bold");
-  doc.setFontSize(18);
-  doc.text(name.toUpperCase(), 105, 20, { align: "center" });
-  doc.setFont(undefined, "normal");
-  doc.setFontSize(11);
-  doc.text(`MATRIC: ${matric}`, 105, 28, { align: "center" });
-  doc.text(`Grading scale: ${SCALES[state.scale].label}`, 105, 34, { align: "center" });
-  doc.line(20, 38, 190, 38);
-
-  let y = 48;
-
-  state.years.forEach((year, yi) => {
-    if (y > 240) {
-      doc.addPage();
-      y = 20;
-    }
-    doc.setFontSize(12);
-    doc.setFont(undefined, "bold");
-    doc.text(`ACADEMIC YEAR ${yi + 1}`, 20, y);
-    doc.setFont(undefined, "normal");
-    y += 5;
-
-    [["sem1", "SEM 1"], ["sem2", "SEM 2"]].forEach(([key, label]) => {
-      if (y > 250) {
-        doc.addPage();
-        y = 20;
-      }
-      const stats = result.breakdown[yi][key];
-      const rows = year[key]
-        .filter(hasInput)
-        .map((c, i) => [i + 1, c.code || "-", c.unit || "-", c.grade || "-"]);
-
-      doc.autoTable({
-        startY: y,
-        head: [[`${label} (GPA: ${formatGpa(stats.gpa)})`, "CODE", "UNIT", "GRADE"]],
-        body: rows.length ? rows : [["-", "No courses entered", "", ""]],
-        theme: "grid",
-        headStyles: { fillColor: [26, 54, 93] },
-        margin: { left: 20, right: 20 },
-      });
-      y = doc.lastAutoTable.finalY + 12;
-    });
-  });
-
-  if (y > 245) {
-    doc.addPage();
-    y = 20;
+  if (!downloadTranscriptPdf(model)) {
+    toast("The PDF tool didn't load. Check your connection and try again.");
   }
-  doc.setFontSize(14);
-  doc.setFont(undefined, "bold");
-  doc.text("SUMMARY REPORT", 20, y);
-  doc.setFont(undefined, "normal");
-  doc.setFontSize(11);
-  doc.text(`Total Credit Units: ${result.totalUnits}`, 20, y + 8);
-  doc.text(
-    `Cumulative CGPA: ${result.cgpa === null ? "0.00" : result.cgpa.toFixed(2)}`,
-    20,
-    y + 15
-  );
-  doc.text(`Degree Classification: ${result.classification || "N/A"}`, 20, y + 22);
-
-  doc.setFontSize(9);
-  doc.setTextColor(120);
-  doc.text(
-    `Generated with UniCalc Scholar on ${new Date().toLocaleDateString()}. Unofficial; for personal reference only.`,
-    20,
-    y + 34
-  );
-
-  const safeName = name.replace(/[^\p{L}\p{N}]+/gu, "_");
-  doc.save(`${safeName}_Transcript.pdf`);
 }
 
 /* ---------- wiring ---------- */

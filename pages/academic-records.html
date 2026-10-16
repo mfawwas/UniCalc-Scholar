@@ -12,6 +12,7 @@
       nomodule
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
+    <script src="../assets/js/theme.js"></script>
     <link rel="stylesheet" href="../assets/css/pages.css" />
 
     <style>
@@ -148,77 +149,7 @@
   </head>
   <body class="light-mode">
     <div class="app-shell">
-      <aside class="sidebar">
-        <div class="brand">
-          <div class="logo-icon"><ion-icon name="school"></ion-icon></div>
-          <div class="logo-text">UniCalc</div>
-        </div>
-
-        <nav class="nav-menu">
-          <div class="nav-label">Menu</div>
-          <a href="dashboard.html" class="nav-item">
-            <ion-icon name="grid-outline"></ion-icon>
-            <span>Dashboard</span>
-          </a>
-          <a href="academic-records.html" class="nav-item active">
-            <ion-icon name="folder-open-outline"></ion-icon>
-            <span>Academic Records</span>
-          </a>
-          <a href="cgpa-calculator.html" class="nav-item">
-            <ion-icon name="calculator-outline"></ion-icon>
-            <span>CGPA Calculator</span>
-          </a>
-          <a href="transcripts.html" class="nav-item">
-            <ion-icon name="document-text-outline"></ion-icon>
-            <span>Transcripts</span>
-          </a>
-
-          <div class="nav-label">Preferences</div>
-          <a href="#" class="nav-item">
-            <ion-icon name="settings-outline"></ion-icon>
-            <span>Settings</span>
-          </a>
-        </nav>
-
-        <div class="user-profile-container" id="profile-trigger">
-          <div class="profile-dropup" id="profile-menu">
-            <a href="account-settings.html" class="dropup-item">
-              <ion-icon name="settings-outline"></ion-icon>
-              <span>Account Settings</span>
-            </a>
-            <a href="view-metrics.html" class="dropup-item">
-              <ion-icon name="stats-chart-outline"></ion-icon>
-              <span>View Metrics</span>
-            </a>
-            <div class="dropup-divider"></div>
-            <a
-              href="../auth/login.html"
-              target="_blank"
-              class="dropup-item danger"
-            >
-              <ion-icon name="log-out-outline"></ion-icon>
-              <span>Logout</span>
-            </a>
-          </div>
-
-          <div class="user-mini-profile">
-            <div class="avatar">JK</div>
-            <div class="user-info">
-              <span class="name">John Kuame</span>
-              <span class="role">Student</span>
-            </div>
-            <button
-              type="button"
-              class="btn-icon"
-              id="theme-toggle-btn"
-              onclick="toggleTheme(event)"
-              aria-label="Toggle dark mode"
-            >
-              <ion-icon name="moon-outline"></ion-icon>
-            </button>
-          </div>
-        </div>
-      </aside>
+      <aside class="sidebar" id="sidebar" aria-label="Sidebar"></aside>
 
       <main class="main-content">
         <header class="top-bar">
@@ -336,9 +267,7 @@
       </main>
     </div>
 
-    <div class="sidebar-overlay" id="sidebar-overlay"></div>
-
-    <script src="../assets/js/pages.js"></script>
+    <script type="module" src="../assets/js/shell.js"></script>
     <script type="module" src="../assets/js/modules/records.js"></script>
   </body>
 </html>
