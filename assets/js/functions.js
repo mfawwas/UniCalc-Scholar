@@ -17,6 +17,7 @@ import {
 } from "./core/calc.js";
 import * as store from "./core/storage.js";
 import { esc } from "./core/html.js";
+import { toast } from "./core/ui.js";
 import { buildTranscript } from "./core/transcript.js";
 import { downloadTranscriptPdf } from "./core/transcript-pdf.js";
 
@@ -34,8 +35,6 @@ const els = {
   cls: $("class"),
   warning: $("calc-warning"),
   saveNote: $("save-note"),
-  modal: $("clearModal"),
-  importFile: $("import-file"),
   planTargetInput: $("planTarget"),
   planRemainingInput: $("planRemaining"),
   planChips: $("plan-chips"),
@@ -44,35 +43,11 @@ const els = {
 
 let state = store.load() || store.newState();
 let saveTimer = null;
-let toastTimer = null;
 
 /* ---------- helpers ---------- */
 
-function toast(message) {
-  let el = $("toast");
-  if (!el) {
-    el = document.createElement("div");
-    el.id = "toast";
-    el.className = "toast";
-    el.setAttribute("role", "status");
-    document.body.appendChild(el);
-  }
-  el.textContent = message;
-  el.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove("show"), 3500);
-}
-
 function yearHasData(year) {
   return [...year.sem1, ...year.sem2].some(hasInput);
-}
-
-function anyData() {
-  return (
-    state.studentName.trim() ||
-    state.matricNo.trim() ||
-    state.years.some(yearHasData)
-  );
 }
 
 /* ---------- rendering ---------- */
@@ -291,7 +266,7 @@ function setSaveNote(ok) {
   els.saveNote.classList.toggle("is-error", !ok);
   els.saveNote.textContent = ok
     ? "Your data saves automatically on this device."
-    : "Couldn't save on this device (browser storage is blocked or full). Download a backup so you don't lose your work.";
+    : "Couldn't save on this device (browser storage is blocked or full). Use Your data → Download backup (bottom of the sidebar) so you don't lose your work.";
 }
 
 function flushSave() {
@@ -449,57 +424,6 @@ function pickTarget(btn) {
   commit();
 }
 
-/* ---------- clear-all modal ---------- */
-
-function openModal() {
-  els.modal.classList.add("active");
-  els.modal.querySelector(".btn-modal-cancel")?.focus();
-}
-
-function closeModal() {
-  els.modal.classList.remove("active");
-}
-
-function confirmClear() {
-  state = store.newState(state.scale);
-  store.save(state);
-  renderAll();
-  closeModal();
-  toast("All records cleared.");
-}
-
-/* ---------- backup ---------- */
-
-function exportBackup() {
-  flushSave();
-  store.downloadBackup(state);
-}
-
-async function importBackup() {
-  const file = els.importFile.files[0];
-  els.importFile.value = "";
-  if (!file) return;
-  if (file.size > 1_000_000) {
-    return toast("That file is too large to be a UniCalc backup.");
-  }
-
-  try {
-    const next = store.parseBackup(await file.text());
-    if (
-      anyData() &&
-      !confirm("Importing will replace everything currently on this page. Continue?")
-    ) {
-      return;
-    }
-    state = next;
-    renderAll();
-    flushSave();
-    toast("Backup imported.");
-  } catch (err) {
-    toast(err.message);
-  }
-}
-
 /* ---------- PDF transcript ---------- */
 
 function exportPDF() {
@@ -521,25 +445,25 @@ const actions = {
   "remove-year": removeYear,
   "plan-target": pickTarget,
   "export-pdf": exportPDF,
-  "export-backup": exportBackup,
-  "import-backup": () => els.importFile.click(),
-  "open-clear": openModal,
-  "close-clear": closeModal,
-  "confirm-clear": confirmClear,
 };
 
 document.addEventListener("click", (event) => {
-  if (event.target === els.modal) return closeModal();
   const btn = event.target.closest("[data-action]");
   if (btn) actions[btn.dataset.action]?.(btn, event);
 });
 
 document.addEventListener("input", onEdit);
 document.addEventListener("change", onEdit);
-els.importFile.addEventListener("change", importBackup);
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") closeModal();
+// The shell's "Your data" menu (import / clear / edit details) tells us when saved data changed.
+window.addEventListener("unicalc:flush", () => saveTimer && flushSave());
+window.addEventListener("unicalc:data-changed", (event) => {
+  event.preventDefault(); // handled here: no page reload needed
+  clearTimeout(saveTimer);
+  saveTimer = null;
+  state = store.load() || store.newState();
+  renderAll();
+  setSaveNote(true);
 });
 
 // Don't lose a pending save if the tab is closed or hidden.

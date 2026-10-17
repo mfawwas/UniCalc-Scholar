@@ -157,27 +157,6 @@
         font-size: 1.3rem;
       }
 
-      .btn-ghost {
-        background: transparent;
-        color: var(--text-main);
-        border: 1px solid var(--border);
-        padding: 12px;
-        width: 100%;
-        font-size: 0.9rem;
-      }
-
-      .btn-ghost:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-
-      .backup-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-top: 10px;
-      }
-
       .year-head {
         display: flex;
         justify-content: space-between;
@@ -363,103 +342,6 @@
         margin-bottom: 25px;
       }
 
-      .btn-danger {
-        background: #fff;
-        color: #e53e3e;
-        border: 1px solid #feb2b2;
-        width: 100%;
-        padding: 12px;
-        font-weight: 600;
-        border-radius: 6px;
-        cursor: pointer;
-        margin-top: 10px;
-      }
-
-      .btn-danger:hover {
-        background: #fff5f5 !important;
-        border-color: #e53e3e !important;
-        color: #c53030 !important;
-      }
-
-      .modal-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        backdrop-filter: blur(2px);
-        align-items: center;
-        justify-content: center;
-      }
-
-      .modal-overlay.active {
-        display: flex;
-      }
-
-      .modal-content {
-        background: white;
-        padding: 30px;
-        border-radius: 16px;
-        max-width: 400px;
-        width: 90%;
-        text-align: center;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      }
-
-      .modal-icon {
-        font-size: 2rem;
-        color: #e53e3e;
-        margin-bottom: 15px;
-      }
-
-      .modal-content h2 {
-        margin-bottom: 10px;
-        color: #1a202c;
-      }
-
-      .modal-content p {
-        color: #718096;
-        margin-bottom: 25px;
-        line-height: 1.5;
-      }
-
-      .modal-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
-
-      .btn-modal-cancel {
-        background: #edf2f7;
-        color: #4a5568;
-        border: none;
-        padding: 12px;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 0.95rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .btn-modal-delete {
-        background: #e53e3e;
-        color: white;
-        border: none;
-        padding: 12px;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 0.95rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
       .planner-card {
         margin-top: 40px;
       }
@@ -552,30 +434,6 @@
         color: var(--accent);
       }
 
-      .toast {
-        position: fixed;
-        bottom: 24px;
-        left: 50%;
-        transform: translate(-50%, 20px);
-        max-width: 90%;
-        background: var(--primary);
-        color: #fff;
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.25s, transform 0.25s;
-        z-index: 1100;
-      }
-
-      .toast.show {
-        opacity: 1;
-        transform: translate(-50%, 0);
-      }
-
       @media (max-width: 600px) {
         .input-group,
         .results-grid {
@@ -596,10 +454,6 @@
         .btn-add {
           width: 100%;
         }
-
-        .backup-row {
-          grid-template-columns: 1fr;
-        }
       }
 
       .dark-mode input,
@@ -607,23 +461,6 @@
         background: var(--card-bg);
         color: var(--text-main);
         border-color: var(--border);
-      }
-
-      .dark-mode .modal-content {
-        background: var(--card-bg);
-        color: var(--text-main);
-      }
-
-      .dark-mode .modal-icon {
-        color: #f56565;
-      }
-
-      .dark-mode .modal-content h2 {
-        color: var(--text-main);
-      }
-
-      .dark-mode .modal-content p {
-        color: var(--text-light);
       }
 
       .dark-mode .gpa-row {
@@ -653,14 +490,12 @@
         border-bottom-color: var(--border);
       }
 
-      .dark-mode .btn-danger,
       .dark-mode .btn-year-remove {
         background: transparent;
         color: #f56565;
         border: 1px solid rgba(245, 101, 101, 0.3);
       }
 
-      .dark-mode .btn-danger:hover,
       .dark-mode .btn-year-remove:hover {
         background: rgba(245, 101, 101, 0.1) !important;
         border-color: #f56565 !important;
@@ -762,54 +597,9 @@
           <button type="button" class="btn btn-primary" data-action="export-pdf">
             Download Full Transcript PDF
           </button>
-
-          <div class="backup-row">
-            <button type="button" class="btn btn-ghost" data-action="export-backup">
-              Download Backup (.json)
-            </button>
-            <button type="button" class="btn btn-ghost" data-action="import-backup">
-              Import Backup
-            </button>
-          </div>
-          <input
-            type="file"
-            id="import-file"
-            accept="application/json,.json"
-            hidden
-          />
-
-          <button type="button" class="btn btn-danger" data-action="open-clear">
-            Clear All Records
-          </button>
-
           <p class="save-note" id="save-note">
             Your data saves automatically on this device.
           </p>
-
-          <div
-            id="clearModal"
-            class="modal-overlay"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="clearModalTitle"
-          >
-            <div class="modal-content">
-              <div class="modal-icon">⚠️</div>
-              <h2 id="clearModalTitle">Clear All Records?</h2>
-              <p>
-                You are about to delete all entered courses, grades, and student
-                info. This action cannot be undone.
-              </p>
-              <div class="modal-actions">
-                <button type="button" class="btn-modal-cancel" data-action="close-clear">
-                  No, keep it
-                </button>
-                <button type="button" class="btn-modal-delete" data-action="confirm-clear">
-                  Yes, Delete!
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div class="card planner-card" id="planner">
