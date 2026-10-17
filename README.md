@@ -27,7 +27,7 @@ npx serve .
 python3 -m http.server 8000
 ```
 
-or use the Live Server extension in VS Code. Then open the address it prints (for example `http://localhost:8000`).
+or use the Live Server extension in VS Code. Then open the address it prints (for example `http://localhost:5500`).
 
 ## Deploy
 
@@ -93,7 +93,7 @@ Saved data is a single JSON object in `localStorage` under the key `unicalc:v1` 
 
 ## Privacy
 
-No accounts, no analytics, no cookies. Nothing you enter leaves your device. The app pages load icons from `unpkg.com` and the PDF libraries from `cdnjs.cloudflare.com`; those services can see your IP address when your browser fetches the files, but receive none of your data. See `privacy.html`.
+No accounts, no analytics, no cookies. Nothing you enter leaves your device. The app pages load icons from inbuilt icon pack and the PDF libraries from online providers; those services can see your IP address when your browser fetches the files, but receive none of your data. See `privacy.html`.
 
 ## Browser support
 
@@ -106,3 +106,4 @@ Any current version of Chrome, Edge, Firefox or Safari (ES modules and `localSto
 ## Credits
 
 Developed by Rava Tech and Bhig Dave.
+Unicalc Scholar V2.0
