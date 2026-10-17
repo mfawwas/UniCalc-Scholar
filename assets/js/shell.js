@@ -14,6 +14,7 @@ import * as store from "./core/storage.js";
 import { esc } from "./core/html.js";
 import { hasInput } from "./core/calc.js";
 import { toast, openDialog } from "./core/ui.js";
+import { registerServiceWorker } from "./core/pwa.js";
 
 const NAV = [
   { href: "dashboard.html", icon: "grid-outline", label: "Dashboard" },
@@ -314,6 +315,7 @@ if (sidebar) {
 
   syncThemeIcon();
   initMobileMenu();
+  registerServiceWorker();
 
   try {
     const flash = sessionStorage.getItem(FLASH_KEY);

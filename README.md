@@ -1,264 +1,108 @@
-# 🎓 UniCalc Scholar - Full-Stack CGPA Management System
+# UniCalc Scholar
 
-**Status**: ✅ Production Ready | **Version**: 1.0.0 | **All Phases**: Complete
+A free CGPA calculator for Nigerian university students. Add your courses, see your CGPA and class of degree instantly, plan the grades you need for a target, and export a PDF transcript.
 
-UniCalc Scholar is a professional, multi-year CGPA (Cumulative Grade Point Average) calculator designed specifically for the Nigerian university grading system. It has been transformed from a frontend-only application into a complete **full-stack system** with backend persistence, user authentication, and comprehensive management features.
+Everything runs in the browser. There are no accounts and no server: your results are saved on your own device.
 
-## ✨ Key Features
+Built with plain HTML, CSS and JavaScript. No framework, no build step, no dependencies to install.
 
-### Calculator Features
-* **Multi-Year Support**: Add as many academic years as needed (100L, 200L, 300L, 400L)
-* **Real-time Dashboard**: 3-column summary showing Total Credit Units, Semester GPAs, and Cumulative CGPA
-* **Responsive Design**: Fully optimized for mobile and desktop screens
-* **PDF Export**: Generate professional academic transcripts
-* **Smart Classification**: Automatic degree class determination based on CGPA
+## Features
 
-### Backend Features (NEW - Phase 1-3)
-* **User Authentication**: Secure JWT-based login and registration
-* **Cloud Storage**: Persistent data storage in MongoDB
-* **Profile Management**: Upload and manage profile images
-* **Newsletter System**: Subscribe to academic metrics and transcripts
-* **Settings Management**: Manage account, academic, and security preferences
-* **CGPA Calculation**: Server-side calculation using Nigerian 5.0 scale
-* **Data Export**: Export records as CSV or JSON
+- **5.0 and 4.0 grading scales**, switchable at any time. Grade points and class of degree follow the scale.
+- **Semester and cumulative results** that update as you type. CGPA is total quality points divided by total units (not an average of semester GPAs).
+- **Target CGPA planner**: enter a target and the units you have left to see the average grade you need, shown as a mix of grades, or a clear message when the target is out of reach.
+- **Dashboard** with a CGPA-by-semester chart, and an **academic records** page with progress rings, units earned, courses passed and per-year tables.
+- **Transcript page** with a live preview, PDF download and print. It is an unofficial personal summary, not a certified transcript.
+- **Autosave** to the browser's local storage, plus **backup and restore** as a JSON file from the "Your data" menu (click your name at the bottom of the sidebar).
+- **Works offline** after the first visit, and can be installed to a phone or desktop (service worker and web app manifest).
+- Light and dark themes, responsive layout, keyboard-accessible dialogs.
 
-## 🛠️ Tech Stack
+## Run it locally
 
-### Frontend
-* HTML5 & CSS3 - Modern, responsive design
-* Vanilla JavaScript - All calculations and interactions
-* Ionicons v7.1.0 - Professional icons
-* Fetch API - API communication
+The scripts are ES modules, so the pages must be opened through a web server (double-clicking the HTML files will not work). Any static server is fine:
 
-### Backend
-* **Express.js** - Web framework
-* **Node.js** - Runtime environment
-* **MongoDB** - Database
-* **Mongoose** - ODM
-* **JWT** - Authentication
-* **Bcryptjs** - Password hashing
-* **Multer** - File uploads
-
-### Architecture
-* RESTful API with 21+ endpoints
-* 3 MongoDB collections (User, Record, Newsletter)
-* JWT-based authentication
-* File storage system for profile images
-
-## 🚀 Quick Start
-
-### Backend Setup
 ```bash
-cd backend
-npm install
-npm start
-# Server runs on http://localhost:5000
+# from the project folder, pick one
+npx serve .
+python3 -m http.server 8000
 ```
 
-### Frontend Access
-```bash
-npx http-server
-# Access at http://localhost:8080
-```
+or use the Live Server extension in VS Code. Then open the address it prints (for example `http://localhost:8000`).
 
-### First Steps
-1. Navigate to login page
-2. Create new account
-3. Update account settings
-4. Use CGPA calculator
-5. Subscribe to newsletters
+## Deploy
 
-## 📁 Project Structure
+It is a static site. On Vercel, import the repository with no framework preset and no build command. `vercel.json` only adds a few response headers.
+
+## Project structure
 
 ```
-UniCalc/
-├── backend/                  # Express.js backend
-│   ├── controllers/         # Business logic (5 modules)
-│   ├── routes/              # API endpoints (5 modules)
-│   ├── models/              # MongoDB schemas (3 models)
-│   ├── middleware/          # JWT verification
-│   ├── uploads/profiles/    # Profile image storage
-│   ├── server.js            # Express server
-│   └── package.json         # Dependencies
-│
-├── pages/                   # HTML pages (6 updated)
-├── assets/
-│   ├── css/                 # Styling
-│   └── js/                  # JavaScript (updated with API)
-├── auth/                    # Authentication pages
-├── utils/                   # Utilities
-│
-└── Documentation/           # 10+ comprehensive guides
-    ├── QUICK_REFERENCE.md
-    ├── TESTING_GUIDE.md
-    ├── DEPLOYMENT_GUIDE.md
-    ├── COMPLETE_IMPLEMENTATION_SUMMARY.md
-    └── ... (more guides)
+index.html                     Landing page
+privacy.html  terms.html       Legal pages
+404.html                       Not-found page
+manifest.webmanifest           Install manifest
+sw.js                          Service worker (offline support)
+vercel.json                    Response headers
+pages/
+  cgpa-calculator.html         Calculator and target planner
+  dashboard.html               Overview and CGPA progression chart
+  academic-records.html        Progress rings and per-year tables
+  transcripts.html             Transcript preview, PDF, print
+assets/
+  css/
+    app.css                    Landing page styles
+    pages.css                  App styles (sidebar, cards, dialogs, print)
+    page-simple.css            Privacy, Terms and 404 pages
+  icons/                       Favicon and app icons
+  js/
+    shell.js                   Sidebar, "Your data" menu, theme toggle, mobile menu
+    theme.js                   Applies the saved theme before first paint
+    functions.js               Calculator page
+    dashboard.js               Dashboard page
+    transcripts.js             Transcript page
+    landing.js                 Landing page
+    modules/records.js         Academic records page
+    core/
+      calc.js                  Grading engine (pure functions, no DOM)
+      storage.js               localStorage, validation, backup import/export
+      transcript.js            Transcript model shared by preview, print and PDF
+      transcript-pdf.js        PDF renderer (jsPDF)
+      charts.js                SVG line chart
+      ui.js                    Toast and dialog helpers
+      html.js                  HTML escaping
+      pwa.js                   Service worker registration
 ```
 
-## 📊 API Endpoints (21 Total)
+## How it works
 
-### Authentication (2)
-* `POST /api/auth/register` - Create account
-* `POST /api/auth/login` - Login user
+All grading logic lives in `assets/js/core/calc.js` as pure functions, so it is easy to read and check.
 
-### Records (5)
-* `POST /api/records/save` - Save CGPA records
-* `GET /api/records/load` - Load records
-* `POST /api/records/calculate` - Calculate CGPA
-* `GET /api/records/export-pdf` - Export transcript
-* `DELETE /api/records/clear` - Clear records
+| Scale | Grade points | First Class | Second Upper | Second Lower | Third Class | Pass |
+| ----- | ------------ | ----------- | ------------ | ------------ | ----------- | ---- |
+| 5.0   | A=5 B=4 C=3 D=2 E=1 F=0 | 4.50+ | 3.50+ | 2.40+ | 1.50+ | 1.00+ |
+| 4.0   | A=4 B=3 C=2 D=1 F=0     | 3.50+ | 3.00+ | 2.50+ | 2.00+ | 1.00+ |
 
-### Newsletter (4)
-* `POST /api/newsletter/subscribe` - Subscribe
-* `GET /api/newsletter/check` - Check status
-* `GET /api/newsletter/unsubscribe` - Unsubscribe
-* `GET /api/newsletter/subscribers` - List subscribers
+Universities differ in scales and cutoffs. If yours does, change the tables at the top of `calc.js`.
 
-### Settings (7)
-* `GET /api/settings` - Get all settings
-* `POST /api/settings/account` - Update account
-* `POST /api/settings/academic` - Update academic
-* `POST /api/settings/password` - Change password
-* ... (4 more endpoints)
+Rules worth knowing:
 
-### Profile (3)
-* `POST /api/profile/upload-image` - Upload image
-* `GET /api/profile/image` - Get image
-* `DELETE /api/profile/delete-image` - Delete image
+- A course counts only when it has both a unit (1 to 6) and a valid grade for the current scale. Incomplete rows are flagged, not silently counted.
+- "Total units" counts every graded course (attempted). "Units earned" excludes grades worth 0 points, and is what degree progress uses.
+- CGPA and GPA are rounded to 2 decimal places, and the class of degree is decided from the rounded value shown on screen.
 
-## 🔐 Security Features
+Saved data is a single JSON object in `localStorage` under the key `unicalc:v1` (scale, name, matric number, years of semesters with course code, unit and grade, planner inputs). Everything read back from storage is validated before use, so edited or corrupted data cannot break the app.
 
-- ✅ JWT authentication (7-day expiration)
-- ✅ Password hashing (bcryptjs, 10 rounds)
-- ✅ User data isolation
-- ✅ CORS protection
-- ✅ Input validation
-- ✅ File upload validation
-- ✅ Bearer token authentication
+## Privacy
 
-## 📚 Documentation
+No accounts, no analytics, no cookies. Nothing you enter leaves your device. The app pages load icons from `unpkg.com` and the PDF libraries from `cdnjs.cloudflare.com`; those services can see your IP address when your browser fetches the files, but receive none of your data. See `privacy.html`.
 
-Comprehensive documentation is provided:
+## Browser support
 
-| Document | Purpose |
-|----------|---------|
-| **QUICK_REFERENCE.md** | Quick API reference and examples |
-| **TESTING_GUIDE.md** | Comprehensive API testing guide |
-| **DEPLOYMENT_GUIDE.md** | Production deployment instructions |
-| **COMPLETE_IMPLEMENTATION_SUMMARY.md** | Full architecture overview |
-| **PHASE3_SUMMARY.md** | Phase 3 implementation details |
-| **VERIFICATION_REPORT.md** | Quality assurance report |
+Any current version of Chrome, Edge, Firefox or Safari (ES modules and `localStorage` required).
 
-**Start here**: [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)
+## Offline support
 
-## 📦 Installation
+`sw.js` saves the app's own files on the first visit and serves them again when there is no connection. Our own files are fetched network-first, so you always get the latest version when online. If you add or remove files, update the `PRECACHE` list in `sw.js` and bump `CACHE_VERSION`.
 
-### Prerequisites
-- Node.js v14+
-- MongoDB (Atlas or local)
-- npm or yarn
+## Credits
 
-### Backend Installation
-```bash
-cd backend
-npm install
-cp .env.example .env
-# Edit .env with your MongoDB URI and JWT secret
-npm start
-```
-
-### Frontend Installation
-```bash
-# No build required - all vanilla JavaScript
-# Use any HTTP server:
-npx http-server
-# or use Live Server in VS Code
-```
-
-## 🧪 Testing
-
-All endpoints have been tested and verified. See [TESTING_GUIDE.md](TESTING_GUIDE.md) for:
-- Complete test cases
-- Example API calls
-- Error scenarios
-- Integration workflows
-
-## 🚀 Deployment
-
-Ready for production deployment to:
-- Heroku
-- DigitalOcean
-- AWS EC2
-- Self-hosted VPS
-
-See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed instructions.
-
-## 📈 Project Status
-
-### ✅ Completed
-- Phase 1: Records API ✅
-- Phase 2: Newsletter API ✅
-- Phase 3: Profile & Account API ✅
-- Backend infrastructure ✅
-- Frontend integration ✅
-- Documentation ✅
-- Security implementation ✅
-
-### 🔄 Ready for
-- User testing
-- Production deployment
-- Phase 4 (Dashboard statistics)
-- Scaling
-
-## 🎯 CGPA Calculation
-
-### Nigerian 5.0 Scale
-| Grade | Points |
-|-------|--------|
-| A | 5.0 |
-| B | 4.0 |
-| C | 3.0 |
-| D | 2.0 |
-| E | 1.0 |
-| F | 0.0 |
-
-### Formula
-```
-CGPA = Total Quality Points / Total Units
-Quality Points = Grade Points × Units
-```
-
-## 📞 Support
-
-For questions or issues:
-1. Check [QUICK_REFERENCE.md](QUICK_REFERENCE.md) for quick answers
-2. See [TESTING_GUIDE.md](TESTING_GUIDE.md) for API examples
-3. Review [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) troubleshooting section
-4. Read [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) for guide to all docs
-
-## 📄 License
-
-Open source project for educational use.
-
-## 👥 Support
-
-For detailed documentation, see:
-- [Documentation Index](DOCUMENTATION_INDEX.md)
-- [Quick Reference](QUICK_REFERENCE.md)
-- [Complete Implementation Summary](COMPLETE_IMPLEMENTATION_SUMMARY.md)
-
----
-
-**Status**: ✅ Production Ready  
-**Version**: 1.0.0  
-**Last Updated**: 2024
-
-
-
-* Add Years: If you are in a higher level, click the "+ Add Another Academic Year" button to expand your record.
-
-* Export: Click "Download Full Transcript PDF" to save a copy for your records or applications.
-
-This project is open-source and free to use.
-
+Developed by Rava Tech and Bhig Dave.
