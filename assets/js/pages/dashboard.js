@@ -1,6 +1,6 @@
 /**
  * Dashboard: everything shown here is derived from what the user saved in the calculator.
- * Loaded as an ES module: <script type="module" src="../assets/js/dashboard.js">
+ * Loaded as an ES module: <script type="module" src="../assets/js/pages/dashboard.js">
  */
 
 import {
@@ -9,9 +9,9 @@ import {
   semesterSeries,
   latestYearWithResults,
   formatGpa,
-} from "./core/calc.js";
-import * as store from "./core/storage.js";
-import { lineChartSvg } from "./core/charts.js";
+} from "../core/calc.js";
+import * as store from "../core/storage.js";
+import { lineChartSvg } from "../core/charts.js";
 
 const $ = (id) => document.getElementById(id);
 

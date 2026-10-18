@@ -1,9 +1,10 @@
 /**
- * Landing page behaviour: navbar shadow on scroll, reveal-on-scroll, offline support.
- * Loaded as an ES module: <script type="module" src="assets/js/landing.js">
+ * Landing page behaviour: navbar shadow on scroll, reveal-on-scroll, theme toggle, offline support.
+ * Loaded as an ES module: <script type="module" src="assets/js/pages/index.js">
  */
 
-import { registerServiceWorker } from "./core/pwa.js";
+import { registerServiceWorker } from "../core/pwa.js";
+import { bindThemeToggle } from "../core/theme-toggle.js";
 
 const nav = document.querySelector(".navbar");
 const onScroll = () => nav.classList.toggle("navbar-scrolled", window.scrollY > 20);
@@ -31,4 +32,5 @@ if (reduceMotion || !("IntersectionObserver" in window)) {
   revealables.forEach((el) => observer.observe(el));
 }
 
+bindThemeToggle(document.getElementById("theme-toggle"));
 registerServiceWorker();

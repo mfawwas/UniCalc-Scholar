@@ -37,6 +37,7 @@ It is a static site. On Vercel, import the repository with no framework preset a
 
 ```
 index.html                     Landing page
+contact.html                   Contact page
 privacy.html  terms.html       Legal pages
 404.html                       Not-found page
 manifest.webmanifest           Install manifest
@@ -49,18 +50,21 @@ pages/
   transcripts.html             Transcript preview, PDF, print
 assets/
   css/
-    app.css                    Landing page styles
-    pages.css                  App styles (sidebar, cards, dialogs, print)
-    page-simple.css            Privacy, Terms and 404 pages
+    landing.css                Landing page styles
+    app.css                    App styles (sidebar, cards, dialogs, print)
+    simple.css                 Contact, Privacy, Terms and 404 pages
   icons/                       Favicon and app icons
   js/
-    shell.js                   Sidebar, "Your data" menu, theme toggle, mobile menu
-    theme.js                   Applies the saved theme before first paint
-    functions.js               Calculator page
-    dashboard.js               Dashboard page
-    transcripts.js             Transcript page
-    landing.js                 Landing page
-    modules/records.js         Academic records page
+    app/
+      shell.js                 Sidebar, "Your data" menu, theme toggle, mobile menu
+      theme.js                 Applies the saved theme before first paint
+    pages/
+      index.js                 Landing page
+      cgpa-calculator.js       Calculator page
+      dashboard.js             Dashboard page
+      academic-records.js      Academic records page
+      transcripts.js           Transcript page
+      simple.js                Contact, Privacy, Terms and 404 pages
     core/
       calc.js                  Grading engine (pure functions, no DOM)
       storage.js               localStorage, validation, backup import/export
@@ -70,7 +74,12 @@ assets/
       ui.js                    Toast and dialog helpers
       html.js                  HTML escaping
       pwa.js                   Service worker registration
+      theme-toggle.js          Light/dark toggle
 ```
+
+Files are grouped by role: `core/` holds shared logic with no page-specific code,
+`app/` holds the app shell and pre-paint setup, and `pages/` holds one controller
+per HTML page with the same name as the page it drives.
 
 ## How it works
 

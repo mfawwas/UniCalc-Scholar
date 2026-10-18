@@ -2,7 +2,7 @@
  * CGPA calculator page controller.
  * - `state` is the single source of truth; the DOM is rendered from it.
  * - Saved automatically to this device (localStorage). No account or server needed.
- * - Loaded as an ES module: <script type="module" src="../assets/js/functions.js">
+ * - Loaded as an ES module: <script type="module" src="../assets/js/pages/cgpa-calculator.js">
  */
 
 import {
@@ -14,12 +14,12 @@ import {
   formatGpa,
   hasInput,
   planTarget,
-} from "./core/calc.js";
-import * as store from "./core/storage.js";
-import { esc } from "./core/html.js";
-import { toast } from "./core/ui.js";
-import { buildTranscript } from "./core/transcript.js";
-import { downloadTranscriptPdf } from "./core/transcript-pdf.js";
+} from "../core/calc.js";
+import * as store from "../core/storage.js";
+import { esc } from "../core/html.js";
+import { toast } from "../core/ui.js";
+import { buildTranscript } from "../core/transcript.js";
+import { downloadTranscriptPdf } from "../core/transcript-pdf.js";
 
 const { LIMITS, blankCourse, blankYear } = store;
 

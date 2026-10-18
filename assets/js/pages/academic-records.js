@@ -1,7 +1,7 @@
 /**
  * Academic Records page: progress rings and per-year course tables,
  * all derived from what the user saved in the calculator.
- * Loaded as an ES module: <script type="module" src="../assets/js/modules/records.js">
+ * Loaded as an ES module: <script type="module" src="../assets/js/pages/academic-records.js">
  */
 
 import {
