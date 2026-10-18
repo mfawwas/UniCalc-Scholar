@@ -2,7 +2,7 @@
  * Shared app shell for every page in /pages.
  * Each page only needs an empty <aside class="sidebar" id="sidebar"></aside>;
  * navigation, the profile menu ("Your data"), theme toggle and mobile menu all come from here.
- * Loaded as an ES module: <script type="module" src="../assets/js/shell.js">
+ * Loaded as an ES module: <script type="module" src="../assets/js/app/shell.js">
  *
  * When the menu changes saved data it fires "unicalc:data-changed" (cancelable).
  * A page that keeps data in memory (the calculator) listens, reloads from storage and calls
@@ -10,11 +10,12 @@
  * Before reading saved data it fires "unicalc:flush" so such a page can save pending edits first.
  */
 
-import * as store from "./core/storage.js";
-import { esc } from "./core/html.js";
-import { hasInput } from "./core/calc.js";
-import { toast, openDialog } from "./core/ui.js";
-import { registerServiceWorker } from "./core/pwa.js";
+import * as store from "../core/storage.js";
+import { esc } from "../core/html.js";
+import { hasInput } from "../core/calc.js";
+import { toast, openDialog } from "../core/ui.js";
+import { registerServiceWorker } from "../core/pwa.js";
+import { isDark, toggleTheme } from "../core/theme-toggle.js";
 
 const NAV = [
   { href: "dashboard.html", icon: "grid-outline", label: "Dashboard" },
@@ -115,23 +116,9 @@ const menuIsOpen = () => document.getElementById("profile-menu")?.classList.cont
 
 /* ---------- theme ---------- */
 
-const root = document.documentElement;
-
 function syncThemeIcon() {
   const icon = document.querySelector("#theme-toggle-btn ion-icon");
-  if (icon) {
-    icon.setAttribute("name", root.classList.contains("dark-mode") ? "sunny-outline" : "moon-outline");
-  }
-}
-
-function toggleTheme() {
-  const dark = root.classList.toggle("dark-mode");
-  try {
-    localStorage.setItem("theme", dark ? "dark" : "light");
-  } catch {
-    /* storage blocked: theme still changes for this visit */
-  }
-  syncThemeIcon();
+  if (icon) icon.setAttribute("name", isDark() ? "sunny-outline" : "moon-outline");
 }
 
 /* ---------- "Your data" actions ---------- */
@@ -294,7 +281,10 @@ if (sidebar) {
   });
 
   sidebar.addEventListener("click", (e) => {
-    if (e.target.closest("#theme-toggle-btn")) return toggleTheme();
+    if (e.target.closest("#theme-toggle-btn")) {
+      toggleTheme();
+      return syncThemeIcon();
+    }
     if (e.target.closest("#profile-trigger")) return setMenu(!menuIsOpen());
     const item = e.target.closest("[data-menu]");
     if (item) {

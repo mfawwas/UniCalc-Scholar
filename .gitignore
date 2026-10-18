@@ -1,0 +1,8 @@
+# Personal backup files exported from the app (they contain names and matric numbers)
+unicalc-backup-*.json
+
+# Tooling and system files
+.vercel/
+node_modules/
+.DS_Store
+Thumbs.db

@@ -10,13 +10,14 @@
  * Bump CACHE_VERSION when files are added or removed, so old copies are cleaned up.
  */
 
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v3";
 const CACHE = `unicalc-${CACHE_VERSION}`;
 const CDN_HOSTS = ["unpkg.com", "cdnjs.cloudflare.com"];
 
 const PRECACHE = [
   "/",
   "/index.html",
+  "/contact.html",
   "/privacy.html",
   "/terms.html",
   "/404.html",
@@ -25,24 +26,26 @@ const PRECACHE = [
   "/pages/cgpa-calculator.html",
   "/pages/dashboard.html",
   "/pages/transcripts.html",
+  "/assets/css/landing.css",
   "/assets/css/app.css",
-  "/assets/css/page-simple.css",
-  "/assets/css/pages.css",
-  "/assets/js/dashboard.js",
-  "/assets/js/functions.js",
-  "/assets/js/landing.js",
-  "/assets/js/shell.js",
-  "/assets/js/theme.js",
-  "/assets/js/transcripts.js",
+  "/assets/css/simple.css",
+  "/assets/js/app/shell.js",
+  "/assets/js/app/theme.js",
+  "/assets/js/pages/index.js",
+  "/assets/js/pages/cgpa-calculator.js",
+  "/assets/js/pages/dashboard.js",
+  "/assets/js/pages/academic-records.js",
+  "/assets/js/pages/transcripts.js",
+  "/assets/js/pages/simple.js",
   "/assets/js/core/calc.js",
   "/assets/js/core/charts.js",
   "/assets/js/core/html.js",
   "/assets/js/core/pwa.js",
   "/assets/js/core/storage.js",
+  "/assets/js/core/theme-toggle.js",
   "/assets/js/core/transcript-pdf.js",
   "/assets/js/core/transcript.js",
   "/assets/js/core/ui.js",
-  "/assets/js/modules/records.js",
   "/assets/icons/favicon.svg",
   "/assets/icons/favicon-32.png",
   "/assets/icons/icon-192.png",

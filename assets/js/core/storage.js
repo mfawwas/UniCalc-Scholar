@@ -168,7 +168,7 @@ export function parseBackup(fileText) {
   try {
     parsed = JSON.parse(fileText);
   } catch {
-    throw new Error("That file isn't valid JSON.");
+    throw new Error("That file couldn't be read as a UniCalc backup.");
   }
 
   const candidate =

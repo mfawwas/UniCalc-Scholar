@@ -1,13 +1,13 @@
 /**
  * Transcripts page: a live preview of the saved results, plus PDF download and print.
- * Loaded as an ES module: <script type="module" src="../assets/js/transcripts.js">
+ * Loaded as an ES module: <script type="module" src="../assets/js/pages/transcripts.js">
  */
 
-import * as store from "./core/storage.js";
-import { formatGpa } from "./core/calc.js";
-import { buildTranscript } from "./core/transcript.js";
-import { downloadTranscriptPdf } from "./core/transcript-pdf.js";
-import { esc } from "./core/html.js";
+import * as store from "../core/storage.js";
+import { formatGpa } from "../core/calc.js";
+import { buildTranscript } from "../core/transcript.js";
+import { downloadTranscriptPdf } from "../core/transcript-pdf.js";
+import { esc } from "../core/html.js";
 
 const $ = (id) => document.getElementById(id);
 
