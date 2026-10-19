@@ -75,11 +75,8 @@ assets/
       html.js                  HTML escaping
       pwa.js                   Service worker registration
       theme-toggle.js          Light/dark toggle
-<<<<<<< HEAD
       feedback.js              "Help & feedback" dialog (WhatsApp and email)
       feedback-nudge.js        Dismissible feedback prompt after success moments
-=======
->>>>>>> 4cd5b73e1cb952f6bff8081d678a3678ea45da80
 ```
 
 Files are grouped by role: `core/` holds shared logic with no page-specific code,

@@ -10,11 +10,7 @@
  * Bump CACHE_VERSION when files are added or removed, so old copies are cleaned up.
  */
 
-<<<<<<< HEAD
 const CACHE_VERSION = "v4";
-=======
-const CACHE_VERSION = "v3";
->>>>>>> 4cd5b73e1cb952f6bff8081d678a3678ea45da80
 const CACHE = `unicalc-${CACHE_VERSION}`;
 const CDN_HOSTS = ["unpkg.com", "cdnjs.cloudflare.com"];
 
