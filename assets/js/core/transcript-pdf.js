@@ -94,5 +94,8 @@ export function downloadTranscriptPdf(model) {
   const doc = buildPdf(model, JsPDF);
   if (!doc) return false;
   doc.save(transcriptFileName(model));
+  // Announce a successful download. The feedback nudge listens for this; the
+  // PDF module intentionally knows nothing about it.
+  window.dispatchEvent(new CustomEvent("unicalc:pdf-downloaded"));
   return true;
 }

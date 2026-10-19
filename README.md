@@ -75,6 +75,8 @@ assets/
       html.js                  HTML escaping
       pwa.js                   Service worker registration
       theme-toggle.js          Light/dark toggle
+      feedback.js              "Help & feedback" dialog (WhatsApp and email)
+      feedback-nudge.js        Dismissible feedback prompt after success moments
 ```
 
 Files are grouped by role: `core/` holds shared logic with no page-specific code,
@@ -111,6 +113,13 @@ Any current version of Chrome, Edge, Firefox or Safari (ES modules and `localSto
 ## Offline support
 
 `sw.js` saves the app's own files on the first visit and serves them again when there is no connection. Our own files are fetched network-first, so you always get the latest version when online. If you add or remove files, update the `PRECACHE` list in `sw.js` and bump `CACHE_VERSION`.
+
+## Roadmap
+
+- **Import results from a result slip.** Paste result text or upload a result
+  slip, and parse it on your device so course codes, units and grades fill in
+  automatically. There is no university portal login, and nothing is uploaded:
+  parsing happens in the browser and the pasted text is discarded after import.
 
 ## Credits
 

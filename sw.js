@@ -10,7 +10,7 @@
  * Bump CACHE_VERSION when files are added or removed, so old copies are cleaned up.
  */
 
-const CACHE_VERSION = "v3";
+const CACHE_VERSION = "v4";
 const CACHE = `unicalc-${CACHE_VERSION}`;
 const CDN_HOSTS = ["unpkg.com", "cdnjs.cloudflare.com"];
 
@@ -39,6 +39,8 @@ const PRECACHE = [
   "/assets/js/pages/simple.js",
   "/assets/js/core/calc.js",
   "/assets/js/core/charts.js",
+  "/assets/js/core/feedback-nudge.js",
+  "/assets/js/core/feedback.js",
   "/assets/js/core/html.js",
   "/assets/js/core/pwa.js",
   "/assets/js/core/storage.js",

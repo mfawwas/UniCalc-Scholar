@@ -16,6 +16,8 @@ import { hasInput } from "../core/calc.js";
 import { toast, openDialog } from "../core/ui.js";
 import { registerServiceWorker } from "../core/pwa.js";
 import { isDark, toggleTheme } from "../core/theme-toggle.js";
+import { initFeedbackDialog, openFeedbackDialog } from "../core/feedback.js";
+import { initFeedbackNudge } from "../core/feedback-nudge.js";
 
 const NAV = [
   { href: "dashboard.html", icon: "grid-outline", label: "Dashboard" },
@@ -67,6 +69,17 @@ function renderSidebar() {
     <nav class="nav-menu" aria-label="Main">
       <div class="nav-label">Menu</div>
       ${links}
+    </nav>
+
+    <nav class="nav-menu nav-menu-secondary" aria-label="Support">
+      <div class="nav-label">Support</div>
+      <button type="button" class="nav-item nav-item-button" data-action="feedback">
+        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span>Help &amp; feedback</span>
+      </button>
     </nav>
 
     <div class="user-profile-container">
@@ -286,6 +299,10 @@ if (sidebar) {
       return syncThemeIcon();
     }
     if (e.target.closest("#profile-trigger")) return setMenu(!menuIsOpen());
+    if (e.target.closest('[data-action="feedback"]')) {
+      openFeedbackDialog();
+      return;
+    }
     const item = e.target.closest("[data-menu]");
     if (item) {
       setMenu(false);
@@ -306,6 +323,8 @@ if (sidebar) {
   syncThemeIcon();
   initMobileMenu();
   registerServiceWorker();
+  initFeedbackDialog();
+  initFeedbackNudge();
 
   try {
     const flash = sessionStorage.getItem(FLASH_KEY);
