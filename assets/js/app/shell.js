@@ -16,8 +16,11 @@ import { hasInput } from "../core/calc.js";
 import { toast, openDialog } from "../core/ui.js";
 import { registerServiceWorker } from "../core/pwa.js";
 import { isDark, toggleTheme } from "../core/theme-toggle.js";
+<<<<<<< HEAD
 import { initFeedbackDialog, openFeedbackDialog } from "../core/feedback.js";
 import { initFeedbackNudge } from "../core/feedback-nudge.js";
+=======
+>>>>>>> 4cd5b73e1cb952f6bff8081d678a3678ea45da80
 
 const NAV = [
   { href: "dashboard.html", icon: "grid-outline", label: "Dashboard" },

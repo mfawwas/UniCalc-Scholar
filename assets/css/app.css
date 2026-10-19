@@ -107,6 +107,7 @@ body {
   font-weight: 600;
 }
 
+<<<<<<< HEAD
 /* Utility nav entries are buttons (they open the feedback dialog, not a page). */
 .nav-item-button {
   width: 100%;
@@ -122,6 +123,8 @@ body {
   flex: 0 0 18px;
 }
 
+=======
+>>>>>>> 4cd5b73e1cb952f6bff8081d678a3678ea45da80
 .user-mini-profile {
   margin-top: auto;
   display: flex;
@@ -952,6 +955,7 @@ a.brand:focus-visible {
   transform: translate(-50%, 0);
 }
 
+<<<<<<< HEAD
 /* ---- Help & feedback dialog (core/feedback.js) ---- */
 
 .feedback-dialog {
@@ -1182,6 +1186,8 @@ a.brand:focus-visible {
   }
 }
 
+=======
+>>>>>>> 4cd5b73e1cb952f6bff8081d678a3678ea45da80
 /* ---- Print: show only the page content ---- */
 
 @media print {
@@ -1200,7 +1206,10 @@ a.brand:focus-visible {
   .sidebar,
   .sidebar-overlay,
   .top-bar,
+<<<<<<< HEAD
   .feedback-nudge,
+=======
+>>>>>>> 4cd5b73e1cb952f6bff8081d678a3678ea45da80
   .no-print {
     display: none !important;
   }
